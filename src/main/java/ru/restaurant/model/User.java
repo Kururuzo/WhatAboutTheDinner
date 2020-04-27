@@ -68,6 +68,13 @@ public class User extends AbstractNamedEntity{
         this.enabled = enabled;
         this.registered = registered;
         setRoles(roles);
+        //setVotes
+    }
+
+    public User(User u) {
+        this(u.getId(), u.getName(), u.getEmail(), u.getPassword(), u.isEnabled(), u.getRegistered(), u.getRoles()
+//        , u.getVotes()
+        );
     }
 
     public String getEmail() {

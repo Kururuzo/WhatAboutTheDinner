@@ -7,8 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
-//@Entity
-//@Table(name = "dishes")
+@Entity
+@Table(name = "dishes")
 public class Dish extends AbstractNamedEntity{
 
     @Column(name = "price", nullable = false)
@@ -18,11 +18,7 @@ public class Dish extends AbstractNamedEntity{
 
     public Dish() {}
 
-    public Dish(Integer price) {
-        this.price = price;
-    }
-
-    public Dish(Integer id, String name, Integer price) {
+        public Dish(Integer id, String name, Integer price) {
         super(id, name);
         this.price = price;
     }

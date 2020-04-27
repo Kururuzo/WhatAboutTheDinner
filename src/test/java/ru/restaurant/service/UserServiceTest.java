@@ -3,20 +3,88 @@ package ru.restaurant.service;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import ru.restaurant.model.Role;
 import ru.restaurant.model.User;
+import ru.restaurant.repository.UserRepository;
+import ru.restaurant.util.Exception.NotFoundException;
+
+import javax.validation.ConstraintViolationException;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static ru.restaurant.UserTestData.*;
+
 
 class UserServiceTest extends AbstractServiceTest{
 
     @Autowired
-    UserService userService;
+    UserService service;
 
     @Test
-    public void get() {
-        User user = userService.get(100_000);
-        Assertions.assertEquals("user@yandex.ru", user.getEmail());
-        Assertions.assertEquals("{noop}password", user.getPassword());
-        Assertions.assertTrue(user.isEnabled());
-        System.out.println(user);
+    void get() throws Exception {
+        User user = service.get(ADMIN_ID);
+        USER_MATCHER.assertMatch(user, ADMIN);
+    }
+
+    @Test
+    void getNotFound() throws Exception {
+        assertThrows(NotFoundException.class, () -> service.get(1));
+    }
+
+    @Test
+    void getAll() throws Exception {
+        List<User> all = service.getAll();
+        USER_MATCHER.assertMatch(all, ADMIN, USER);
+    }
+
+    @Test
+    void create() throws Exception {
+        User newUser = getNew();
+        User created = service.create(new User(newUser));
+        int newId = created.getId();
+        newUser.setId(newId);
+        USER_MATCHER.assertMatch(created, newUser);
+        USER_MATCHER.assertMatch(service.get(newId), newUser);
+    }
+
+    @Test
+    void duplicateMailCreate() throws Exception {
+        assertThrows(DataAccessException.class, () ->
+                service.create(new User(null, "Duplicate", "user@yandex.ru", "newPass", Role.USER)));
+    }
+
+    @Test
+    void createWithException() throws Exception {
+        //think about
+    }
+
+    @Test
+    void update() throws Exception {
+        User updated = getUpdated();
+        service.update(new User(updated));
+        USER_MATCHER.assertMatch(service.get(USER_ID), updated);
+    }
+
+    @Test
+    void enable() {
+        service.enable(USER_ID, false);
+        assertFalse(service.get(USER_ID).isEnabled());
+        service.enable(USER_ID, true);
+        assertTrue(service.get(USER_ID).isEnabled());
+    }
+
+    @Test
+    public void delete() throws Exception {
+        service.delete(USER_ID);
+        assertThrows(NotFoundException.class, () -> service.delete(USER_ID));
+    }
+
+    @Test
+    void deletedNotFound() throws Exception {
+        assertThrows(NotFoundException.class, () -> service.delete(1));
     }
 
 }
