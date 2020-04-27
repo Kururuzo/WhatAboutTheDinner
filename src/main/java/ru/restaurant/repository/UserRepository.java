@@ -1,20 +1,10 @@
 package ru.restaurant.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.restaurant.model.User;
 
-import java.util.List;
-
+@Transactional
 public interface UserRepository extends JpaRepository<User, Integer> {
 
-    // null if not found, when updated
-    User save(User user);
-
-    // false if not found
-    boolean delete(int id);
-
-    // null if not found
-    User get(int id);
-
-    List<User> getAll();
 }

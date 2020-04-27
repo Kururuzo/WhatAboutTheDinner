@@ -18,9 +18,19 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
+        <!-- DataBase -->
+        <hsqldb.version>2.5.0</hsqldb.version>
+
         <!-- Spring -->
         <spring.version>5.2.5.RELEASE</spring.version>
         <spring-data-jpa.version>2.2.6.RELEASE</spring-data-jpa.version>
+
+        <!-- Lombok -->
+        <lombok.version>1.18.12</lombok.version>
+
+        <!-- Hibernate -->
+        <hibernate.version>5.4.14.Final</hibernate.version>
+        <hibernate-validator.version>6.1.4.Final</hibernate-validator.version>
 
         <!-- Tests -->
         <junit.jupiter.version>5.6.1</junit.jupiter.version>
@@ -32,10 +42,12 @@
         <dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
-            <version>2.5.0</version>
+            <version>${hsqldb.version}</version>
+            <scope>runtime</scope>
         </dependency>
 
         <!-- Spring -->
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
@@ -47,6 +59,26 @@
             <version>${spring-data-jpa.version}</version>
         </dependency>
 
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!--- ORM -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${hibernate-validator.version}</version>
+        </dependency>
+
         <!-- Tests -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -54,6 +86,14 @@
             <version>${junit.jupiter.version}</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.version}</version>
+            <scope>test</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -67,6 +107,13 @@
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
                 </configuration>
             </plugin>
             <plugin>
@@ -80,4 +127,6 @@
             </plugin>
         </plugins>
     </build>
+
+
 </project>
