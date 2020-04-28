@@ -16,8 +16,11 @@ public class Dish extends AbstractNamedEntity{
     @NotNull
     private Integer price;
 
-    public Dish() {}
+    public Dish(Dish d) {
+        this (d.id, d.name, d.price);
+    }
 
+    public Dish() {}
         public Dish(Integer id, String name, Integer price) {
         super(id, name);
         this.price = price;
@@ -29,5 +32,14 @@ public class Dish extends AbstractNamedEntity{
 
     public void setPrice(Integer price) {
         this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return "Dish{" +
+                "id=" + id +
+                ", price=" + price +
+                ", name='" + name +
+                '}';
     }
 }

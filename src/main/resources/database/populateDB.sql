@@ -14,10 +14,15 @@ INSERT INTO USER_ROLES (ROLE, USER_ID) VALUES
   ('ADMIN', 100001),
   ('USER', 100001);
 
+-- 100_002
 INSERT INTO DISHES (NAME, PRICE) VALUES
-    ('Soup', 50),
-    ('Salad', 50),
+    ('Meat Soup', 50),
+    ('Chicken Soup', 40),
+    ('Salad with meat', 50),
+    ('Vegetable salad', 40),
+    ('Caesar', 50),
     ('BeefSteak', 150),
+    ('Fried Chicken', 110),
     ('IceCream', 30),
     ('Juice', 20),
     ('Coffee', 15),

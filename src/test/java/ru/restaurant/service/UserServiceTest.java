@@ -1,18 +1,13 @@
 package ru.restaurant.service;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import ru.restaurant.model.Role;
 import ru.restaurant.model.User;
-import ru.restaurant.repository.UserRepository;
 import ru.restaurant.util.Exception.NotFoundException;
 
-import javax.validation.ConstraintViolationException;
-import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static ru.restaurant.UserTestData.*;
@@ -69,7 +64,7 @@ class UserServiceTest extends AbstractServiceTest{
     }
 
     @Test
-    void enable() {
+    void enable() throws Exception {
         service.enable(USER_ID, false);
         assertFalse(service.get(USER_ID).isEnabled());
         service.enable(USER_ID, true);
@@ -79,7 +74,7 @@ class UserServiceTest extends AbstractServiceTest{
     @Test
     public void delete() throws Exception {
         service.delete(USER_ID);
-        assertThrows(NotFoundException.class, () -> service.delete(USER_ID));
+        USER_MATCHER.assertMatch(service.getAll(), List.of(ADMIN));
     }
 
     @Test

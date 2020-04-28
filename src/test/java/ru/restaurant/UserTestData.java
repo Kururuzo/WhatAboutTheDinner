@@ -8,7 +8,6 @@ import java.util.Date;
 
 import static ru.restaurant.model.AbstractBaseEntity.START_SEQ;
 
-
 public class UserTestData {
     public static TestMatcher<User> USER_MATCHER = TestMatcher.usingFieldsComparator(User.class, "registered", "password");
 
