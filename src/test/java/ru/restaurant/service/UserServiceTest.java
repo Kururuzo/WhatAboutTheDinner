@@ -1,8 +1,11 @@
 package ru.restaurant.service;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import ru.restaurant.DishTestData;
+import ru.restaurant.VoteTestData;
 import ru.restaurant.model.Role;
 import ru.restaurant.model.User;
 import ru.restaurant.util.Exception.NotFoundException;
@@ -22,6 +25,14 @@ class UserServiceTest extends AbstractServiceTest{
     void get() throws Exception {
         User user = service.get(ADMIN_ID);
         USER_MATCHER.assertMatch(user, ADMIN);
+    }
+
+    @Test
+    void getWithVotes() throws Exception {
+        User user = service.getWithVotes(USER_ID);
+        USER_MATCHER.assertMatch(user, USER);
+        assertEquals(1, user.getVotes().size());
+        VoteTestData.VOTE_MATCHER.assertMatch(user.getVotes().iterator().next(), VoteTestData.VOTE_1);
     }
 
     @Test

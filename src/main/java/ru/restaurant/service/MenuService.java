@@ -4,40 +4,40 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-import ru.restaurant.model.Dish;
-import ru.restaurant.repository.DishRepository;
+import ru.restaurant.model.Menu;
+import ru.restaurant.repository.MenuRepository;
 
 import java.util.List;
 
 import static ru.restaurant.util.ValidationUtil.checkNotFoundWithId;
 
-@Service("dishService")
-public class DishService {
-    private final DishRepository repository;
+@Service("menuService")
+public class MenuService {
+    private final MenuRepository repository;
 
-    public DishService(DishRepository repository) {
+    public MenuService(MenuRepository repository) {
         this.repository = repository;
     }
 
-    public Dish get(int id) {
+    public Menu get(int id) {
         return checkNotFoundWithId(repository.findById(id).orElse(null), id);
     }
 
-//    @Cacheable("dishes")
-    public List<Dish> getAll() {
+    //    @Cacheable("menus")
+    public List<Menu> getAll() {
         return repository.findAll(Sort.by(Sort.Direction.DESC, "id"));
     }
 
-    public Dish create (Dish dish) {
-        Assert.notNull(dish, "dish must not be null");
-        return repository.save(dish);
+    public Menu create (Menu menu) {
+        Assert.notNull(menu, "menu must not be null");
+        return repository.save(menu);
     }
 
-//    @CacheEvict(value = "dishes", allEntries = true)
+    //    @CacheEvict(value = "menus", allEntries = true)
     @Transactional
-    public void update (Dish dish) {
-        Assert.notNull(dish, "dish must not be null");
-        repository.save(dish);
+    public void update (Menu menu) {
+        Assert.notNull(menu, "menu must not be null");
+        repository.save(menu);
     }
 
     public void delete (int id) {

@@ -2,7 +2,9 @@ package ru.restaurant;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 public class TestMatcher<T> {
     private final Class<T> clazz;

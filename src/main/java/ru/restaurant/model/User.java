@@ -47,20 +47,20 @@ public class User extends AbstractNamedEntity{
     @BatchSize(size = 200)
     private Set<Role> roles;
 
-//    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
-//    @OrderBy("date DESC")
-//    private Set<Vote> votes;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+    @OrderBy("date DESC")
+    private Set<Vote> votes;
 
     public User(){}
 
     public User(Integer id, String name, String email, String password, Role role, Role... roles) {
         this(id, name, email, password, true, new Date(), EnumSet.of(role, roles)
-//                , null
+                , null
         );
     }
 
     public User(Integer id, String name, String email, String password, boolean enabled, Date registered, Collection<Role> roles
-//            , Set<Vote> votes
+            , Set<Vote> votes
     ) {
         super(id, name);
         this.email = email;
@@ -68,12 +68,12 @@ public class User extends AbstractNamedEntity{
         this.enabled = enabled;
         this.registered = registered;
         setRoles(roles);
-        //setVotes
+        this.votes = votes;
     }
 
     public User(User u) {
         this(u.getId(), u.getName(), u.getEmail(), u.getPassword(), u.isEnabled(), u.getRegistered(), u.getRoles()
-//        , u.getVotes()
+        , u.getVotes()
         );
     }
 
@@ -117,13 +117,13 @@ public class User extends AbstractNamedEntity{
         this.roles = CollectionUtils.isEmpty(roles) ? EnumSet.noneOf(Role.class) : EnumSet.copyOf(roles);
     }
 
-//    public Set<Vote> getVotes() {
-//        return votes;
-//    }
-//
-//    public void setVotes(Set<Vote> votes) {
-//        this.votes = CollectionUtils.isEmpty(votes) ? Collections.emptySet() : votes;
-//    }
+    public Set<Vote> getVotes() {
+        return votes;
+    }
+
+    public void setVotes(Set<Vote> votes) {
+        this.votes = CollectionUtils.isEmpty(votes) ? Collections.emptySet() : votes;
+    }
 
     @Override
     public String toString() {
@@ -133,7 +133,7 @@ public class User extends AbstractNamedEntity{
                 ", name=" + name +
                 ", enabled=" + enabled +
                 ", roles=" + roles +
-//                ", votes=" + votes +
+                ", votes=" + votes +
                 '}';
     }
 
