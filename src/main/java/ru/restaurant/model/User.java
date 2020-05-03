@@ -1,5 +1,6 @@
 package ru.restaurant.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -13,7 +14,9 @@ import javax.validation.constraints.Size;
 import java.util.*;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users"
+//        , uniqueConstraints = {@UniqueConstraint(columnNames = "email", name = "users_unique_email_idx")}
+)
 public class User extends AbstractNamedEntity{
 
     @Column(name = "email", nullable = false, unique = true)
@@ -26,7 +29,7 @@ public class User extends AbstractNamedEntity{
     @NotBlank
     @Size(min = 5, max = 100)
     // https://stackoverflow.com/a/12505165/548473
-//    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     @Column(name = "enabled", nullable = false, columnDefinition = "boot default true")
@@ -34,7 +37,7 @@ public class User extends AbstractNamedEntity{
 
     @Column(name = "registered", nullable = false, columnDefinition = "timestamp default now()")
     @NotNull
-//    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private Date registered = new Date();
 
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
@@ -47,8 +50,10 @@ public class User extends AbstractNamedEntity{
     @BatchSize(size = 200)
     private Set<Role> roles;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     @OrderBy("date DESC")
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    @BatchSize(size = 200)
     private Set<Vote> votes;
 
     public User(){}
@@ -68,7 +73,7 @@ public class User extends AbstractNamedEntity{
         this.enabled = enabled;
         this.registered = registered;
         setRoles(roles);
-        this.votes = votes;
+//        this.votes = votes;
     }
 
     public User(User u) {

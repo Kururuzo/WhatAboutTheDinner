@@ -12,6 +12,7 @@ import ru.restaurant.repository.UserRepository;
 import java.util.List;
 
 import static ru.restaurant.util.ValidationUtil.checkNotFoundWithId;
+import static ru.restaurant.util.ValidationUtil.checkNotFound;
 
 @Service("userService")
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
@@ -25,6 +26,11 @@ public class UserService {
 
     public User get(int id) {
         return checkNotFoundWithId(repository.findById(id).orElse(null), id);
+    }
+
+    public User getByEmail(String email) {
+        Assert.notNull(email, "email must not be null");
+        return checkNotFound(repository.findByEmail(email).orElse(null), "email=" + email);
     }
 
     public User getWithVotes(int id) {
@@ -61,4 +67,6 @@ public class UserService {
     public void delete(int id) {
         checkNotFoundWithId(repository.delete(id) != 0, id);
     }
+
+
 }

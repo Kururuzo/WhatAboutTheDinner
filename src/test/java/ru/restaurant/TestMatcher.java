@@ -1,10 +1,12 @@
 package ru.restaurant;
 
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.ResultMatcher;
+import ru.restaurant.web.TestUtil;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 public class TestMatcher<T> {
     private final Class<T> clazz;
@@ -43,6 +45,25 @@ public class TestMatcher<T> {
         } else {
             assertThat(actual).usingElementComparatorIgnoringFields(fieldsToIgnore).isEqualTo(expected);
         }
+    }
+
+    //JSON
+    public ResultMatcher contentJson(T expected) {
+        return result -> assertMatch(TestUtil.readFromJsonMvcResult(result, clazz), expected);
+    }
+
+    @SafeVarargs
+    public final ResultMatcher contentJson(T... expected) {
+        return contentJson(List.of(expected));
+    }
+
+    public ResultMatcher contentJson(Iterable<T> expected) {
+        return new ResultMatcher() {
+            @Override
+            public void match(MvcResult result) throws Exception {
+                assertMatch(TestUtil.readListFromJsonMvcResult(result, clazz), expected);
+            }
+        };
     }
 
 }

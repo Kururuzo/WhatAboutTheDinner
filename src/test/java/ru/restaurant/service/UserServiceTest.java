@@ -27,13 +27,13 @@ class UserServiceTest extends AbstractServiceTest{
         USER_MATCHER.assertMatch(user, ADMIN);
     }
 
-    @Test
-    void getWithVotes() throws Exception {
-        User user = service.getWithVotes(USER_ID);
-        USER_MATCHER.assertMatch(user, USER);
-        assertEquals(1, user.getVotes().size());
-        VoteTestData.VOTE_MATCHER.assertMatch(user.getVotes().iterator().next(), VoteTestData.VOTE_1);
-    }
+//    @Test
+//    void getWithVotes() throws Exception {
+//        User user = service.getWithVotes(USER_ID);
+//        USER_MATCHER.assertMatch(user, USER);
+//        assertEquals(1, user.getVotes().size());
+//        VoteTestData.VOTE_MATCHER.assertMatch(user.getVotes().iterator().next(), VoteTestData.VOTE_1);
+//    }
 
     @Test
     void getNotFound() throws Exception {

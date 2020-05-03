@@ -2,6 +2,7 @@ package ru.restaurant;
 
 import ru.restaurant.model.Role;
 import ru.restaurant.model.User;
+import ru.restaurant.web.json.JsonUtil;
 
 import java.util.Collections;
 import java.util.Date;
@@ -18,7 +19,9 @@ public class UserTestData {
     public static final User ADMIN = new User(ADMIN_ID, "Admin", "admin@gmail.com", "admin",  Role.ADMIN, Role.USER);
 
     public static User getNew() {
-        return new User(null, "New", "new@gmail.com", "newPass", false, new Date(), Collections.singleton(Role.USER), Collections.singleton(VoteTestData.VOTE_1));
+        return new User(null, "New", "new@gmail.com", "newPass", false, new Date(), Collections.singleton(Role.USER)
+                , Collections.singleton(VoteTestData.VOTE_1)
+        );
     }
 
     public static User getUpdated() {
@@ -26,5 +29,9 @@ public class UserTestData {
         updated.setName("UpdatedName");
         updated.setRoles(Collections.singletonList(Role.ADMIN));
         return updated;
+    }
+
+    public static String jsonWithPassword(User user, String passw) {
+        return JsonUtil.writeAdditionProps(user, "password", passw);
     }
 }
