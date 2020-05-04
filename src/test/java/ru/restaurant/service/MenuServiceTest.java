@@ -11,6 +11,9 @@ import ru.restaurant.util.Exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,6 +39,11 @@ class MenuServiceTest extends AbstractServiceTest{
     void getAll() throws Exception {
         List<Menu> all = service.getAll();
         MENU_MATCHER.assertMatch(all, MENUS);
+    }
+
+    @Test
+    void getAllByDate() {
+        MENU_MATCHER.assertMatch(service.getAllByDate(LocalDate.of(2020, Month.APRIL,1)), MENUS);
     }
 
     @Test

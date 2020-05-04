@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.restaurant.model.Menu;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -23,4 +25,7 @@ public interface MenuRepository extends JpaRepository<Menu, Integer> {
     @Transactional
     @Override
     <S extends Menu> S save(S entity);
+
+    List<Menu> findAllByDate(LocalDate date);
+
 }

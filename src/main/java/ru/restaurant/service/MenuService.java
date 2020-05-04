@@ -4,9 +4,12 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import ru.restaurant.HasId;
 import ru.restaurant.model.Menu;
 import ru.restaurant.repository.MenuRepository;
 
+import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
 
 import static ru.restaurant.util.ValidationUtil.checkNotFoundWithId;
@@ -26,6 +29,13 @@ public class MenuService {
     //    @Cacheable("menus")
     public List<Menu> getAll() {
         return repository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+    }
+
+    //    @Cacheable("menus")
+    public List<Menu> getAllByDate(LocalDate date) {
+        List<Menu> allByDate = repository.findAllByDate(date);
+        allByDate.sort(Comparator.comparing(Menu::getId).reversed());
+        return allByDate;
     }
 
     public Menu create (Menu menu) {
