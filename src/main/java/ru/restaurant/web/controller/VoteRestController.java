@@ -11,11 +11,15 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.restaurant.model.Vote;
 import ru.restaurant.service.VoteService;
+import ru.restaurant.to.VoteTo;
+import ru.restaurant.util.Exception.NotFoundException;
 
 import javax.validation.Valid;
 import java.net.URI;
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static ru.restaurant.util.ValidationUtil.assureIdConsistent;
 import static ru.restaurant.util.ValidationUtil.checkNew;
@@ -43,11 +47,11 @@ public class VoteRestController {
         return service.getAll();
     }
 
-//    @GetMapping(params = "date")
-//    public List<Vote> getByDate(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-//        log.info("get votes by date {}", date);
-//        return service.getAllByDate(date);
-//    }
+    @GetMapping(params = "date")
+    public List<Vote> getByDate(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        log.info("get votes by date {}", date);
+        return service.getAllByDate(date);
+    }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Vote> createWithLocation(@Valid @RequestBody Vote vote) {
@@ -75,5 +79,16 @@ public class VoteRestController {
     public void delete(@PathVariable int id) {
         log.info("delete menu {}", id);
         service.delete(id);
+    }
+
+    @GetMapping(path = "/results", params = "date")
+    public List<VoteTo> getVoteResults(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        log.info("Get result of voting");
+        List<VoteTo> resultByDate = service.getResultByDate(date);
+        if (resultByDate.isEmpty()) {
+            throw new NotFoundException("No one voted on that date");
+        }
+
+        return resultByDate.stream().sorted(Comparator.comparing(VoteTo::getVotes)).collect(Collectors.toList());
     }
 }

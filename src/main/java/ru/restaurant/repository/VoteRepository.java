@@ -7,7 +7,10 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import ru.restaurant.model.Vote;
+import ru.restaurant.to.VoteTo;
 
+import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -23,4 +26,10 @@ public interface VoteRepository extends JpaRepository<Vote, Integer> {
     @Transactional
     @Override
     <S extends Vote> S save(S entity);
+
+    List<Vote> findAllByDate(LocalDate date);
+
+    @Query("SELECT new ru.restaurant.to.VoteTo(v.restaurant.name, COUNT(v)) FROM Vote v WHERE v.date=:date GROUP BY v.restaurant.name")
+    List<VoteTo> getResultByDate(@Param("date") LocalDate date);
+
 }

@@ -15,6 +15,7 @@ import ru.restaurant.web.AbstractControllerTest;
 import ru.restaurant.web.json.JsonUtil;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -58,7 +59,19 @@ class VoteRestControllerTest extends AbstractControllerTest {
         )
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andDo(print())
                 .andExpect(VOTE_MATCHER.contentJson(VOTES));
+    }
+
+    @Test
+    void getResults() throws Exception {
+                perform(MockMvcRequestBuilders.get(REST_URL + "results?date=2020-04-01")
+//                .with(userHttpBasic(ADMIN))
+        )
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(VOTE_TO_MATCHER.contentJson(List.of(VOTE_TO_1)));
     }
 
     @Test
@@ -80,7 +93,8 @@ class VoteRestControllerTest extends AbstractControllerTest {
     @Test
     void update() throws Exception {
         Vote updated = VoteTestData.getUpdated();
-        perform(MockMvcRequestBuilders.put(REST_URL + VOTE_1_ID).contentType(MediaType.APPLICATION_JSON)
+        perform(MockMvcRequestBuilders.put(REST_URL + VOTE_1_ID)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonUtil.writeValue(updated))
 //                .with(userHttpBasic(ADMIN))
         )
@@ -97,4 +111,6 @@ class VoteRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isNoContent());
         assertThrows(NotFoundException.class, () -> service.get(VOTE_1_ID));
     }
+
+
 }

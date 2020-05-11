@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.restaurant.model.Menu;
 import ru.restaurant.service.MenuService;
+import ru.restaurant.to.MenuTo;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -52,6 +53,17 @@ public class MenuRestController {
     public List<Menu> getByDate(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         log.info("get menus by date {}", date);
         return service.getAllByDate(date);
+    }
+
+    @GetMapping(value = "/offer", params = "date")
+    public List<MenuTo> getOfferByDate(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        date = date != null ? date : LocalDate.now();
+        log.info("get offer by date {}", date);
+        return service.getOfferByDate(date);
+
+//        List<MenuTo> offerByDate = service.getOfferByDate(date);
+//        return offerByDate;
+
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

@@ -1,6 +1,7 @@
 package ru.restaurant;
 
 import ru.restaurant.model.Vote;
+import ru.restaurant.to.VoteTo;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -12,6 +13,7 @@ import static ru.restaurant.model.AbstractBaseEntity.*;
 
 public class VoteTestData {
     public static TestMatcher<Vote> VOTE_MATCHER = TestMatcher.usingEquals(Vote.class);
+    public static TestMatcher<VoteTo> VOTE_TO_MATCHER = TestMatcher.usingFieldsComparator(VoteTo.class);
 
     public static final int VOTE_1_ID = START_SEQ + 25;
 
@@ -19,6 +21,8 @@ public class VoteTestData {
     public static final Vote VOTE_2 = new Vote(START_SEQ + 26, LocalDate.of(2020, Month.APRIL,1), REST_1, ADMIN);
 
     public static final List<Vote> VOTES = List.of(VOTE_2, VOTE_1);
+
+    public static final VoteTo VOTE_TO_1 = new VoteTo("Lucky Pizza", 2L);
 
     public static Vote getNew(){
         return new Vote(null, LocalDate.of(2020, Month.APRIL,2), REST_2, ADMIN);

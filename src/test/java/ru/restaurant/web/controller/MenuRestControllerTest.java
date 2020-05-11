@@ -10,6 +10,7 @@ import ru.restaurant.MenuTestData;
 import ru.restaurant.RestaurantTestData;
 import ru.restaurant.model.Menu;
 import ru.restaurant.service.MenuService;
+import ru.restaurant.to.MenuTo;
 import ru.restaurant.util.Exception.NotFoundException;
 import ru.restaurant.web.AbstractControllerTest;
 import ru.restaurant.web.json.JsonUtil;
@@ -46,8 +47,10 @@ class MenuRestControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.get(REST_URL)
 //                .with(userHttpBasic(ADMIN))
         )
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andDo(print())
                 .andExpect(MENU_MATCHER.contentJson(MENUS));
     }
 
@@ -56,9 +59,23 @@ class MenuRestControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.get(REST_URL + "?date=2020-04-01")
 //                .with(userHttpBasic(ADMIN))
         )
+                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andDo(print())
                 .andExpect(MENU_MATCHER.contentJson(MENUS));
+    }
+
+    @Test
+    void getOfferByDate() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "offer?date=2020-04-01")
+//                .with(userHttpBasic(ADMIN))
+        )
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(MENU_TO_MATCHER.contentJson(MENUS_TO));
     }
 
     @Test
