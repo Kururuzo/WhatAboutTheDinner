@@ -5,3 +5,4 @@ target
 log
 *.patch
 /LOG_DIR_IS_UNDEFINED/
+

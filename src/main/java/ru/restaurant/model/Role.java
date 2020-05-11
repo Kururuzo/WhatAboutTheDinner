@@ -1,10 +1,12 @@
 package ru.restaurant.model;
 
-public enum Role /*implements GrantedAuthority */ {
+import org.springframework.security.core.GrantedAuthority;
+
+public enum Role implements GrantedAuthority {
     USER,
     ADMIN;
 
-//    @Override
+    @Override
     public String getAuthority() {
         return "ROLE_" + name();
     }

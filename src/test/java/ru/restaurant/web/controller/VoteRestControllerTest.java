@@ -21,8 +21,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static ru.restaurant.UserTestData.USER;
 import static ru.restaurant.VoteTestData.*;
 import static ru.restaurant.web.TestUtil.readFromJson;
+import static ru.restaurant.web.TestUtil.userHttpBasic;
 
 class VoteRestControllerTest extends AbstractControllerTest {
 
@@ -34,8 +36,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
     @Test
     void get() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + VOTE_1_ID)
-//                .with(userHttpBasic(ADMIN))
-        )
+                .with(userHttpBasic(USER)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -45,8 +46,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
     @Test
     void getAll() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL)
-//                .with(userHttpBasic(ADMIN))
-        )
+                .with(userHttpBasic(USER)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(VOTE_MATCHER.contentJson(VOTES));
@@ -55,8 +55,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
     @Test
     void getAllByDate() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + "?date=2020-04-01")
-//                .with(userHttpBasic(ADMIN))
-        )
+                .with(userHttpBasic(USER)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -66,8 +65,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
     @Test
     void getResults() throws Exception {
                 perform(MockMvcRequestBuilders.get(REST_URL + "results?date=2020-04-01")
-//                .with(userHttpBasic(ADMIN))
-        )
+                .with(userHttpBasic(USER)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andDo(print())
@@ -76,9 +74,9 @@ class VoteRestControllerTest extends AbstractControllerTest {
 
     @Test
     void createWithLocation() throws Exception {
-        Vote vote = new Vote(null, LocalDate.of(3000, 1, 1), RestaurantTestData.REST_1, UserTestData.USER);
+        Vote vote = new Vote(null, LocalDate.of(3000, 1, 1), RestaurantTestData.REST_1, USER);
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
-//                .with(userHttpBasic(ADMIN))
+                .with(userHttpBasic(USER))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(vote)))
                 .andDo(print())
@@ -96,7 +94,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.put(REST_URL + VOTE_1_ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(JsonUtil.writeValue(updated))
-//                .with(userHttpBasic(ADMIN))
+                .with(userHttpBasic(USER))
         )
                 .andExpect(status().isNoContent());
 
@@ -106,8 +104,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
     @Test
     void delete() throws Exception {
         perform(MockMvcRequestBuilders.delete(REST_URL + VOTE_1_ID)
-//                .with(userHttpBasic(ADMIN))
-        )
+                .with(userHttpBasic(USER)))
                 .andExpect(status().isNoContent());
         assertThrows(NotFoundException.class, () -> service.get(VOTE_1_ID));
     }

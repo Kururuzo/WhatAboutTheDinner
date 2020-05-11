@@ -27,6 +27,7 @@
         <!-- Spring -->
         <spring.version>5.2.5.RELEASE</spring.version>
         <spring-data-jpa.version>2.2.6.RELEASE</spring-data-jpa.version>
+        <spring.security.version>5.3.2.RELEASE</spring.security.version>
 
         <!-- json -->
         <jackson-json.version>2.11.0</jackson-json.version>
@@ -96,14 +97,6 @@
             <version>${jackson-json.version}</version>
         </dependency>
 
-        <!-- Lombok -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
-            <scope>provided</scope>
-        </dependency>
-
         <!--- ORM -->
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -115,6 +108,26 @@
             <artifactId>hibernate-validator</artifactId>
             <version>${hibernate-validator.version}</version>
         </dependency>
+
+        <!--- spring security -->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>${spring.security.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>${spring.security.version}</version>
+        </dependency>
+
+<!--        what for? try to delete ???-->
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-taglibs</artifactId>
+            <version>${spring.security.version}</version>
+        </dependency>
+
 
         <!-- WEB -->
         <dependency>
@@ -137,6 +150,13 @@
             <version>${spring.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-test</artifactId>
+            <version>${spring.security.version}</version>
+            <scope>test</scope>
+        </dependency>
+
 
         <dependency>
             <groupId>org.assertj</groupId>

@@ -30,5 +30,5 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("SELECT u FROM User u WHERE u.id=?1")
     Optional<User> getWithVotes(int id);
 
-    Optional<User> findByEmail(String email);
+    User getByEmail(String email);
 }

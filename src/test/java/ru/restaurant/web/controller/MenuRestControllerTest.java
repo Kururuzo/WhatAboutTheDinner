@@ -10,7 +10,6 @@ import ru.restaurant.MenuTestData;
 import ru.restaurant.RestaurantTestData;
 import ru.restaurant.model.Menu;
 import ru.restaurant.service.MenuService;
-import ru.restaurant.to.MenuTo;
 import ru.restaurant.util.Exception.NotFoundException;
 import ru.restaurant.web.AbstractControllerTest;
 import ru.restaurant.web.json.JsonUtil;
@@ -22,7 +21,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.restaurant.MenuTestData.*;
+import static ru.restaurant.UserTestData.ADMIN;
+import static ru.restaurant.UserTestData.USER;
 import static ru.restaurant.web.TestUtil.readFromJson;
+import static ru.restaurant.web.TestUtil.userHttpBasic;
 
 class MenuRestControllerTest extends AbstractControllerTest {
 
@@ -34,8 +36,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
     @Test
     void get() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + MENU_1_ID)
-//                .with(userHttpBasic(ADMIN))
-        )
+                .with(userHttpBasic(USER)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -45,8 +46,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
     @Test
     void getAll() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL)
-//                .with(userHttpBasic(ADMIN))
-        )
+                .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -57,8 +57,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
     @Test
     void getAllByDate() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + "?date=2020-04-01")
-//                .with(userHttpBasic(ADMIN))
-        )
+                .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -68,9 +67,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
 
     @Test
     void getOfferByDate() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + "offer?date=2020-04-01")
-//                .with(userHttpBasic(ADMIN))
-        )
+        perform(MockMvcRequestBuilders.get(REST_URL + "offer?date=2020-04-01"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -82,7 +79,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
     void createWithLocation() throws Exception {
         Menu menu = new Menu(null, LocalDate.of(3000, 1, 1), RestaurantTestData.REST_1, DishTestData.DISH_1);
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
-//                .with(userHttpBasic(ADMIN))
+                .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(menu)))
                 .andDo(print())
@@ -99,8 +96,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
         Menu updated = MenuTestData.getUpdated();
         perform(MockMvcRequestBuilders.put(REST_URL + MENU_1_ID).contentType(MediaType.APPLICATION_JSON)
                         .content(JsonUtil.writeValue(updated))
-//                .with(userHttpBasic(ADMIN))
-        )
+                .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isNoContent());
 
         MENU_MATCHER.assertMatch(service.get(MENU_1_ID), updated);
@@ -109,8 +105,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
     @Test
     void delete() throws Exception {
         perform(MockMvcRequestBuilders.delete(REST_URL + MENU_1_ID)
-//                .with(userHttpBasic(ADMIN))
-        )
+                .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isNoContent());
         assertThrows(NotFoundException.class, () -> service.get(MENU_1_ID));
     }

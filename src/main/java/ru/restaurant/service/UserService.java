@@ -3,9 +3,13 @@ package ru.restaurant.service;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import ru.restaurant.AuthorizedUser;
 import ru.restaurant.model.User;
 import ru.restaurant.repository.UserRepository;
 
@@ -16,7 +20,7 @@ import static ru.restaurant.util.ValidationUtil.checkNotFound;
 
 @Service("userService")
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final UserRepository repository;
 
@@ -30,7 +34,7 @@ public class UserService {
 
     public User getByEmail(String email) {
         Assert.notNull(email, "email must not be null");
-        return checkNotFound(repository.findByEmail(email).orElse(null), "email=" + email);
+        return checkNotFound(repository.getByEmail(email), "email=" + email);
     }
 
     public User getWithVotes(int id) {
@@ -69,4 +73,11 @@ public class UserService {
     }
 
 
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+        User user = repository.getByEmail(email.toLowerCase());
+        if (user == null)
+            throw new UsernameNotFoundException(String.format("User %s is not found", email));
+        return new AuthorizedUser(user);
+    }
 }

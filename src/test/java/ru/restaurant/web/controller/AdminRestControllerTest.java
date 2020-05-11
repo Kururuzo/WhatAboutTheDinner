@@ -17,6 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.restaurant.UserTestData.*;
+import static ru.restaurant.web.TestUtil.userHttpBasic;
 
 class AdminRestControllerTest extends AbstractControllerTest {
     private static final String REST_URL = AdminRestController.REST_URL + '/';
@@ -27,8 +28,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
     @Test
     void get() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + ADMIN_ID)
-//                .with(userHttpBasic(ADMIN))
-                )
+                .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andDo(print())
                 // https://jira.spring.io/browse/SPR-14472
@@ -36,11 +36,19 @@ class AdminRestControllerTest extends AbstractControllerTest {
                 .andExpect(USER_MATCHER.contentJson(ADMIN));
     }
 
+//    @Test
+//    void getNotFound() throws Exception {
+//        perform(MockMvcRequestBuilders.get(REST_URL + 1)
+//                .with(userHttpBasic(ADMIN)))
+//                .andDo(print())
+//                .andExpect(status().isUnprocessableEntity())
+//                .andDo(print());
+//    }
+
     @Test
     void getByEmail() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + "by?email=" + ADMIN.getEmail())
-//                .with(userHttpBasic(ADMIN))
-        )
+                .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(USER_MATCHER.contentJson(ADMIN));
@@ -49,8 +57,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
     @Test
     void getAll() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL)
-//                .with(userHttpBasic(ADMIN))
-        )
+                .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -62,7 +69,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
         User newUser = UserTestData.getNew();
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-//                .with(userHttpBasic(ADMIN))
+                .with(userHttpBasic(ADMIN))
                 .content(UserTestData.jsonWithPassword(newUser, "newPass")))
                 .andExpect(status().isCreated());
 
@@ -78,7 +85,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
         User updated = UserTestData.getUpdated();
         perform(MockMvcRequestBuilders.put(REST_URL + USER_ID)
                 .contentType(MediaType.APPLICATION_JSON)
-//                .with(userHttpBasic(ADMIN))
+                .with(userHttpBasic(ADMIN))
                 .content(UserTestData.jsonWithPassword(updated, "newPass")))
                 .andExpect(status().isNoContent());
 
@@ -88,8 +95,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
     @Test
     void delete() throws Exception {
         perform(MockMvcRequestBuilders.delete(REST_URL + USER_ID)
-//                .with(userHttpBasic(ADMIN))
-                )
+                .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
         assertThrows(NotFoundException.class, () -> userService.get(USER_ID));
@@ -100,8 +106,7 @@ class AdminRestControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.patch(REST_URL + USER_ID)
                 .param("enabled", "false")
                 .contentType(MediaType.APPLICATION_JSON)
-//                .with(userHttpBasic(ADMIN))
-                )
+                .with(userHttpBasic(ADMIN)))
                 .andDo(print())
                 .andExpect(status().isNoContent());
 
