@@ -1,4 +1,4 @@
-package ru.restaurant.util.Exception;
+package ru.restaurant.util.exception;
 
 public class IllegalRequestDataException extends RuntimeException {
     public IllegalRequestDataException(String msg) {

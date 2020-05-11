@@ -1,15 +1,15 @@
 package ru.restaurant.service;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import ru.restaurant.DishTestData;
-import ru.restaurant.VoteTestData;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.restaurant.model.Role;
 import ru.restaurant.model.User;
-import ru.restaurant.util.Exception.NotFoundException;
+import ru.restaurant.util.exception.NotFoundException;
 
+import javax.validation.ConstraintViolationException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,14 +26,6 @@ class UserServiceTest extends AbstractServiceTest{
         User user = service.get(ADMIN_ID);
         USER_MATCHER.assertMatch(user, ADMIN);
     }
-
-//    @Test
-//    void getWithVotes() throws Exception {
-//        User user = service.getWithVotes(USER_ID);
-//        USER_MATCHER.assertMatch(user, USER);
-//        assertEquals(1, user.getVotes().size());
-//        VoteTestData.VOTE_MATCHER.assertMatch(user.getVotes().iterator().next(), VoteTestData.VOTE_1);
-//    }
 
     @Test
     void getNotFound() throws Exception {
@@ -63,8 +55,10 @@ class UserServiceTest extends AbstractServiceTest{
     }
 
     @Test
-    void createWithException() throws Exception {
-        //think about
+    void createWithException1() throws Exception {
+        validateRootCause(() -> service.create(new User(null, "  ", "mail@yandex.ru", "password", Role.USER)), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new User(null, "User", "  ", "password", Role.USER)), ConstraintViolationException.class);
+        validateRootCause(() -> service.create(new User(null, "User", "mail@yandex.ru", "  ", Role.USER)), ConstraintViolationException.class);
     }
 
     @Test
@@ -92,5 +86,4 @@ class UserServiceTest extends AbstractServiceTest{
     void deletedNotFound() throws Exception {
         assertThrows(NotFoundException.class, () -> service.delete(1));
     }
-
 }

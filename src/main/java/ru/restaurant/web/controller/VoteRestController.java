@@ -12,7 +12,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.restaurant.model.Vote;
 import ru.restaurant.service.VoteService;
 import ru.restaurant.to.VoteTo;
-import ru.restaurant.util.Exception.NotFoundException;
+import ru.restaurant.util.exception.NotFoundException;
 
 import javax.validation.Valid;
 import java.net.URI;

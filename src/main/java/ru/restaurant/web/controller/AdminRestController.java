@@ -13,8 +13,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = ru.restaurant.web.controller.AdminRestController.REST_URL,
- produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = AdminRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminRestController extends AbstractUserController {
 
     static final String REST_URL = "/rest/admin/users";
@@ -25,6 +24,7 @@ public class AdminRestController extends AbstractUserController {
         return super.get(id);
     }
 
+    @Override
     @GetMapping
     public List<User> getAll() {
         return super.getAll();
@@ -53,6 +53,7 @@ public class AdminRestController extends AbstractUserController {
         super.delete(id);
     }
 
+    @Override
     @GetMapping("/by")
     public User getByMail(@RequestParam String email) {
         return super.getByMail(email);

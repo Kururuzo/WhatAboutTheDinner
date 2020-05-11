@@ -1,4 +1,4 @@
-package ru.restaurant.util.Exception;
+package ru.restaurant.util.exception;
 
 public class NotFoundException extends RuntimeException {
     public NotFoundException(String message) {

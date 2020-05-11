@@ -15,7 +15,7 @@
         <intercept-url pattern="/rest/menus/**" method="GET" access="isAuthenticated()"/>
         <intercept-url pattern="/rest/menus/**" access="hasRole('ROLE_ADMIN')"/>
 
-<!--        <intercept-url pattern="/rest/profile/register" access="isAnonymous()"/>-->
+        <intercept-url pattern="/rest/profile/register" access="isAnonymous()"/>
 
         <intercept-url pattern="/rest/restaurants/**" method="GET" access="isAuthenticated()"/>
         <intercept-url pattern="/rest/restaurants/**" access="hasRole('ROLE_ADMIN')"/>

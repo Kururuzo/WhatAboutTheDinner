@@ -5,6 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.restaurant.model.User;
 import ru.restaurant.service.UserService;
+import ru.restaurant.to.UserTo;
+import ru.restaurant.util.UserUtil;
 import ru.restaurant.util.ValidationUtil;
 
 import java.util.List;
@@ -26,7 +28,7 @@ public abstract class AbstractUserController {
         log.info("getAll");
         return service.getAll();
     }
-
+//
 //    public User create(UserTo userTo) {
 //        log.info("create from to {}", userTo);
 //        return create(UserUtil.createNewFromTo(userTo));
@@ -34,7 +36,7 @@ public abstract class AbstractUserController {
 
     public User create(User user) {
         log.info("create {}", user);
-//        checkNew(user);
+        checkNew(user);
         return service.create(user);
     }
 
@@ -48,12 +50,6 @@ public abstract class AbstractUserController {
         assureIdConsistent(user, id);
         service.update(user);
     }
-
-//    public void update(UserTo userTo, int id) {
-//        log.info("update {} with id={}", userTo, id);
-//        assureIdConsistent(userTo, id);
-//        service.update(userTo);
-//    }
 
     public User getByMail(String email) {
         log.info("getByEmail {}", email);

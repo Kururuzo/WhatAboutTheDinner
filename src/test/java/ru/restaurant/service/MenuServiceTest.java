@@ -7,13 +7,10 @@ import ru.restaurant.DishTestData;
 import ru.restaurant.MenuTestData;
 import ru.restaurant.RestaurantTestData;
 import ru.restaurant.model.Menu;
-import ru.restaurant.util.Exception.NotFoundException;
+import ru.restaurant.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;

@@ -3,6 +3,7 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:mvc="http://www.springframework.org/schema/mvc"
        xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:p="http://www.springframework.org/schema/p"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
        http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
@@ -29,6 +30,15 @@
                     <bean class="org.springframework.security.web.method.annotation.AuthenticationPrincipalArgumentResolver "/>
                 </mvc:argument-resolvers>
     </mvc:annotation-driven>
+
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource"
+          p:cacheSeconds="5"
+          p:defaultEncoding="UTF-8">
+    </bean>
+
+    <bean class="org.springframework.context.support.MessageSourceAccessor">
+        <constructor-arg ref="messageSource"/>
+    </bean>
 
     <context:component-scan base-package="ru.restaurant.web"/>
 

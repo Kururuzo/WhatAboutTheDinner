@@ -6,11 +6,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.restaurant.RestaurantTestData;
-import ru.restaurant.UserTestData;
 import ru.restaurant.VoteTestData;
 import ru.restaurant.model.Vote;
 import ru.restaurant.service.VoteService;
-import ru.restaurant.util.Exception.NotFoundException;
+import ru.restaurant.util.exception.NotFoundException;
 import ru.restaurant.web.AbstractControllerTest;
 import ru.restaurant.web.json.JsonUtil;
 
@@ -44,6 +43,12 @@ class VoteRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void getUnAuth() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + VOTE_1_ID))
+                .andExpect(status().isUnauthorized());
+    }
+
+    @Test
     void getAll() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL)
                 .with(userHttpBasic(USER)))
@@ -73,8 +78,8 @@ class VoteRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void createWithLocation() throws Exception {
-        Vote vote = new Vote(null, LocalDate.of(3000, 1, 1), RestaurantTestData.REST_1, USER);
+    void add() throws Exception {
+        Vote vote = new Vote(LocalDate.of(3000, 1, 1), RestaurantTestData.REST_1, USER);
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .with(userHttpBasic(USER))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -108,6 +113,5 @@ class VoteRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isNoContent());
         assertThrows(NotFoundException.class, () -> service.get(VOTE_1_ID));
     }
-
 
 }

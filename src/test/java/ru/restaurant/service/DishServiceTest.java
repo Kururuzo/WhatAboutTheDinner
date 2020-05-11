@@ -2,10 +2,9 @@ package ru.restaurant.service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import ru.restaurant.DishTestData;
 import ru.restaurant.model.Dish;
-import ru.restaurant.util.Exception.NotFoundException;
+import ru.restaurant.util.exception.NotFoundException;
 
 import java.util.List;
 

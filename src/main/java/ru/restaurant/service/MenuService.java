@@ -4,17 +4,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-import ru.restaurant.HasId;
-import ru.restaurant.model.Dish;
 import ru.restaurant.model.Menu;
 import ru.restaurant.model.Restaurant;
 import ru.restaurant.repository.MenuRepository;
 import ru.restaurant.to.MenuTo;
 import ru.restaurant.to.RestaurantTo;
-import ru.restaurant.util.Exception.NotFoundException;
+import ru.restaurant.util.exception.NotFoundException;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;

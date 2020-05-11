@@ -6,7 +6,7 @@ import org.springframework.dao.DataAccessException;
 import ru.restaurant.RestaurantTestData;
 import ru.restaurant.UserTestData;
 import ru.restaurant.model.Vote;
-import ru.restaurant.util.Exception.NotFoundException;
+import ru.restaurant.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.time.Month;
