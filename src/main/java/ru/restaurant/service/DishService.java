@@ -37,7 +37,8 @@ public class DishService {
     @Transactional
     public void update (Dish dish) {
         Assert.notNull(dish, "dish must not be null");
-        repository.save(dish);
+//        repository.save(dish);
+        checkNotFoundWithId(repository.save(dish), dish.getId());
     }
 
     public void delete (int id) {

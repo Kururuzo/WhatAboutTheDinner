@@ -4,26 +4,51 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-import ru.restaurant.model.Vote;
+import ru.restaurant.model.*;
+import ru.restaurant.repository.MenuRepository;
+import ru.restaurant.repository.RestaurantRepository;
+import ru.restaurant.repository.UserRepository;
 import ru.restaurant.repository.VoteRepository;
-import ru.restaurant.to.VoteTo;
+import ru.restaurant.to.VoteResultsTo;
+import ru.restaurant.util.VoteUtil;
+import ru.restaurant.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import static ru.restaurant.util.ValidationUtil.checkNotFound;
 import static ru.restaurant.util.ValidationUtil.checkNotFoundWithId;
 
 @Service("voteService")
 public class VoteService {
     private final VoteRepository repository;
+    private final RestaurantRepository restaurantRepository;
+    private final UserRepository userRepository;
+    private final MenuRepository menuRepository;
 
-    public VoteService(VoteRepository repository) {
+    public VoteService(VoteRepository repository, RestaurantRepository restaurantRepository, UserRepository userRepository, MenuRepository menuRepository) {
         this.repository = repository;
+        this.restaurantRepository = restaurantRepository;
+        this.userRepository = userRepository;
+        this.menuRepository = menuRepository;
     }
 
-    public Vote get(int id) {
-        return checkNotFoundWithId(repository.findById(id).orElse(null), id);
+    public Vote get(int id, int userId) {
+        return checkNotFoundWithId(repository.findByIdAndUserId(id, userId).orElse(null), id);
+    }
+
+    public Vote getByDateAndUserId(LocalDate date, int userId) {
+        return checkNotFound(repository.findByDateAndUserId(date, userId).orElse(null),
+                "Vote for this date not found");
+    }
+
+    //    @Cacheable("votes")
+    public List<Vote> getAllByUserId(int userId) {
+        List<Vote> all = repository.findAllByUserId(userId);
+        return all.stream().sorted(Comparator.comparing(AbstractBaseEntity::getId).reversed())
+                .collect(Collectors.toList());
     }
 
     //    @Cacheable("votes")
@@ -38,6 +63,46 @@ public class VoteService {
         return allByDate;
     }
 
+    public Vote doVote(LocalDate date, int restaurantId, int userId) {
+        Assert.notNull(date, "date must not be null");
+        VoteUtil.checkIsDateExpired(date, restaurantId);
+        checkNotFound(menuRepository.findByDateAndRestaurantId(date, restaurantId).orElse(null),
+                "Menu for this restaurant and date was not found");
+
+        Restaurant restaurant = checkNotFoundWithId(restaurantRepository.findById(restaurantId).orElse(null), restaurantId);
+        User user = checkNotFoundWithId(userRepository.findById(userId).orElse(null), userId);
+        Vote vote = findByDateAndUserId(date, userId);
+
+        if(vote == null) {
+            vote = new Vote(date, restaurant, user);
+            return repository.save(vote);
+        } else {
+            VoteUtil.checkIsTimeExpired(date, restaurantId);
+            vote.setRestaurant(restaurant);
+            return repository.save(vote);
+        }
+    }
+
+
+    public Vote findByDateAndUserId(LocalDate date, int userId) {
+//        return checkNotFoundWithId(repository.findByDateAndUserId(date, userId).orElse(null), userId);
+        return repository.findByDateAndUserId(date, userId).orElse(null);
+    }
+
+    public void delete (int id, int userId) {
+        checkNotFoundWithId(repository.delete(id, userId), id);
+    }
+
+    public List<VoteResultsTo> getResultByDate(LocalDate date) {
+        return repository.getResultByDate(date);
+    }
+
+
+    //----------------------------- ADMIN --------------------------------
+    public Vote get(int id) {
+        return checkNotFoundWithId(repository.findById(id).orElse(null), id);
+    }
+
     public Vote create (Vote vote) {
         Assert.notNull(vote, "vote must not be null");
         return repository.save(vote);
@@ -50,11 +115,7 @@ public class VoteService {
         repository.save(vote);
     }
 
-    public void delete (int id) {
+    public void delete(int id) {
         checkNotFoundWithId(repository.delete(id) != 0, id);
-    }
-
-    public List<VoteTo> getResultByDate(LocalDate date) {
-        return repository.getResultByDate(date);
     }
 }

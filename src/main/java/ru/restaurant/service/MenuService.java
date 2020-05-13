@@ -19,7 +19,8 @@ import java.util.stream.Collectors;
 
 import static ru.restaurant.util.ValidationUtil.checkNotFoundWithId;
 
-@Service("menuService")
+//@Service("menuService")
+@Service
 public class MenuService {
     private final MenuRepository repository;
 
@@ -45,11 +46,6 @@ public class MenuService {
 
     //    @Cacheable("menus")
     public List<Menu> findByDateWithRestaurants(LocalDate date) {
-//    public List<Menu> getOfferByDate findByDateWithRestaurants(LocalDate date) {
-//        List<Menu> offerByDate = repository.findAllByDate(date);
-//        offerByDate.sort(Comparator.comparing(Menu::getId).reversed());
-//        return offerByDate;
-//        return repository.findByDateWithDishes(date);
         return repository.findByDateWithRestaurants(date);
     }
 
@@ -62,23 +58,12 @@ public class MenuService {
         Map<Restaurant, List<Menu>> restsAndMenusMap = allMenuByDate.stream()
                 .collect(Collectors.groupingBy(Menu::getRestaurant));
 
-//        List<MenuTo> menuTos = new ArrayList<>();
-//
-//        restsAndMenusMap.forEach((key, value) -> {
-//            List<Dish> dishes = value.stream().map(Menu::getDish).collect(Collectors.toList());
-//            menuTos.add(new MenuTo(date, new RestaurantTo(key), dishes));
-//        });
-//
-//        return menuTos.stream()
-//                .sorted(Comparator.comparing(menuTo -> menuTo.getRestaurant().getId())).collect(Collectors.toList());
-//
         return restsAndMenusMap.entrySet().stream().map(en -> new MenuTo(
                     date,
                     new RestaurantTo(en.getKey()),
                     en.getValue().stream().map(Menu::getDish).collect(Collectors.toList())))
                 .sorted(Comparator.comparing(menuTo -> menuTo.getRestaurant().getId()))
                 .collect(Collectors.toList());
-
     }
 
     public Menu create(Menu menu) {

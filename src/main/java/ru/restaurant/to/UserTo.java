@@ -1,6 +1,7 @@
 package ru.restaurant.to;
 
 import ru.restaurant.HasId;
+import ru.restaurant.model.User;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -27,10 +28,17 @@ public class UserTo extends BaseTo implements Serializable {
     }
 
     public UserTo(Integer id, String name, String email, String password) {
-        this.id = id;
+        super.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
+    }
+
+    public UserTo(User user) {
+        super.id = user.getId();
+        this.name = user.getName();
+        this.email = user.getEmail();
+        this.password = user.getPassword();
     }
 
     public String getPassword() {

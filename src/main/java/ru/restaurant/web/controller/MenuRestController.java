@@ -25,10 +25,9 @@ import static ru.restaurant.util.ValidationUtil.checkNew;
 @RestController
 @RequestMapping(value = MenuRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class MenuRestController {
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
     static final String REST_URL = "/rest/menus";
-
-    private final Logger log = LoggerFactory.getLogger(getClass());
 
     private final MenuService service;
 
@@ -60,10 +59,6 @@ public class MenuRestController {
         date = date != null ? date : LocalDate.now();
         log.info("get offer by date {}", date);
         return service.getOfferByDate(date);
-
-//        List<MenuTo> offerByDate = service.getOfferByDate(date);
-//        return offerByDate;
-
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

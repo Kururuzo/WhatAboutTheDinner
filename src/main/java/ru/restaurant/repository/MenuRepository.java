@@ -30,6 +30,10 @@ public interface MenuRepository extends JpaRepository<Menu, Integer> {
 
     List<Menu> findAllByDate(LocalDate date);
 
-    @Query("SELECT m FROM Menu m LEFT JOIN FETCH m.restaurant LEFT JOIN FETCH m.dish WHERE m.date = :date")
+    @Query("SELECT m FROM Menu m LEFT JOIN FETCH m.restaurant LEFT JOIN FETCH m.dish WHERE m.date=:date")
     List<Menu> findByDateWithRestaurants(@Param("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date);
+
+//    @Query("SELECT m FROM Menu m WHERE m.date = :date AND m.restaurant=:restaurantId")
+    Optional<Menu> findByDateAndRestaurantId(@Param("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+                                             @Param("restaurantId") int restaurantId);
 }

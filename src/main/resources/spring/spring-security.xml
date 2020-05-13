@@ -6,7 +6,7 @@
 
     <http pattern="/rest/**" use-expressions="true" name="restSecurityFilterChain" create-session="stateless">
         <http-basic/>
-        <intercept-url pattern="/rest/admin/**" access="hasRole('ROLE_ADMIN')"/>
+        <intercept-url pattern="/**/admin/**" access="hasRole('ROLE_ADMIN')"/>
 
         <intercept-url pattern="/rest/dishes/**" method="GET" access="isAuthenticated()"/>
         <intercept-url pattern="/rest/dishes/**" access="hasRole('ROLE_ADMIN')"/>
@@ -19,6 +19,9 @@
 
         <intercept-url pattern="/rest/restaurants/**" method="GET" access="isAuthenticated()"/>
         <intercept-url pattern="/rest/restaurants/**" access="hasRole('ROLE_ADMIN')"/>
+
+
+<!--        <intercept-url pattern="/rest/votes/**" access="hasRole('ROLE_ADMIN')"/>-->
 
         <intercept-url pattern="/**" access="isAuthenticated()"/>
         <csrf disabled="true"/>
