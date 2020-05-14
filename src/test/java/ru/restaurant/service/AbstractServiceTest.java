@@ -11,9 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
         "classpath:spring/spring-app.xml",
         "classpath:spring/spring-db.xml"
 })
-//@ExtendWith(SpringExtension.class)
 @Sql(scripts = "classpath:database/populateDB.sql", config = @SqlConfig(encoding = "UTF-8"))
-//@ExtendWith(TimingExtension.class)
 abstract public class AbstractServiceTest {
 
     //  Check root cause in JUnit: https://github.com/junit-team/junit4/pull/778

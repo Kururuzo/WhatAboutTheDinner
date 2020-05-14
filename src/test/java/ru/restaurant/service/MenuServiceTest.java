@@ -63,11 +63,6 @@ class MenuServiceTest extends AbstractServiceTest{
     }
 
     @Test
-    void createWithException() throws Exception {
-        //think about
-    }
-
-    @Test
     void update() throws Exception {
         Menu updated = MenuTestData.getUpdated();
         service.update(new Menu(updated));

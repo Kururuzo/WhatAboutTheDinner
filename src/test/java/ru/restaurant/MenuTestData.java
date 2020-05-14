@@ -6,7 +6,6 @@ import ru.restaurant.to.RestaurantTo;
 
 import java.time.LocalDate;
 import java.time.Month;
-import java.util.ArrayList;
 import java.util.List;
 
 import static ru.restaurant.DishTestData.*;

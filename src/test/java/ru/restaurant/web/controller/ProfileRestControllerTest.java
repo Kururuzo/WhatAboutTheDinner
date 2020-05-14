@@ -45,7 +45,6 @@ class ProfileRestControllerTest extends AbstractControllerTest {
         User newUser = UserUtil.createNewFromTo(newTo);
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL + "/register")
                 .contentType(MediaType.APPLICATION_JSON)
-//                .with(userHttpBasic(USER))
                 .content(JsonUtil.writeValue(newTo)))
                 .andDo(print())
                 .andExpect(status().isCreated());

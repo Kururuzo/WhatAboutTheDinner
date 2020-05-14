@@ -1,6 +1,5 @@
 package ru.restaurant.repository;
 
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -33,7 +32,6 @@ public interface MenuRepository extends JpaRepository<Menu, Integer> {
     @Query("SELECT m FROM Menu m LEFT JOIN FETCH m.restaurant LEFT JOIN FETCH m.dish WHERE m.date=:date")
     List<Menu> findByDateWithRestaurants(@Param("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date);
 
-//    @Query("SELECT m FROM Menu m WHERE m.date = :date AND m.restaurant=:restaurantId")
     Optional<Menu> findByDateAndRestaurantId(@Param("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
                                              @Param("restaurantId") int restaurantId);
 }

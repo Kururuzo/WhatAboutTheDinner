@@ -3,7 +3,6 @@ package ru.restaurant;
 import ru.restaurant.model.Vote;
 import ru.restaurant.to.VoteResultsTo;
 import ru.restaurant.to.VoteTo;
-import ru.restaurant.util.VoteUtil;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -37,6 +36,7 @@ public class VoteTestData {
 
     public static Vote getUpdated() {
         Vote vote = new Vote(VOTE_1);
+        vote.setDate(LocalDate.now());
         vote.setRestaurant(REST_3);
         vote.setUser(USER);
         return vote;

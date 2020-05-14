@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.io.Serializable;
 
-public class VoteResultsTo implements Serializable {
+public class VoteResultsTo {
     @JsonProperty("restaurant")
     private String restaurant;
 

@@ -46,10 +46,10 @@ class VoteRestControllerTest extends AbstractControllerTest {
     void get() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + VOTE_1_ID)
                 .with(userHttpBasic(USER)))
-                .andDo(print())
                 .andExpect(status().isOk())
+                .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(VOTE_TO_MATCHER.contentJson(VOTE_1_TO));
+                .andExpect(VOTE_MATCHER.contentJson(VOTE_1));
     }
 
     @Test
@@ -82,10 +82,9 @@ class VoteRestControllerTest extends AbstractControllerTest {
         LocalDate nowDate = LocalDate.now();
         menuService.create(new Menu(nowDate, RestaurantTestData.REST_1, DishTestData.DISH_1));
 
-        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
+        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL + RestaurantTestData.REST_1_ID)
                 .with(userHttpBasic(USER))
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeValue(RestaurantTestData.REST_1_ID)))
+                .contentType(MediaType.APPLICATION_JSON))
                 .andDo(print())
                 .andExpect(status().isCreated());
     }
@@ -99,10 +98,9 @@ class VoteRestControllerTest extends AbstractControllerTest {
 
             Menu menu2 = menuService.create(new Menu(nowDate, RestaurantTestData.REST_2, DishTestData.DISH_2));
 
-            ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
+            ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL + RestaurantTestData.REST_2.getId())
                     .with(userHttpBasic(USER))
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(JsonUtil.writeValue(RestaurantTestData.REST_2.getId())))
+                    .contentType(MediaType.APPLICATION_JSON))
                     .andDo(print())
                     .andExpect(status().isCreated());
 
@@ -114,10 +112,9 @@ class VoteRestControllerTest extends AbstractControllerTest {
             LocalDate nowDate = LocalDate.now();
             voteRepository.save(new Vote(nowDate, RestaurantTestData.REST_1, USER));
 
-            ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
+            ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL + RestaurantTestData.REST_2.getId())
                     .with(userHttpBasic(USER))
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content(JsonUtil.writeValue(RestaurantTestData.REST_2.getId())))
+                    .contentType(MediaType.APPLICATION_JSON))
                     .andDo(print())
                     .andExpect(status().isUnprocessableEntity());
         }
@@ -139,7 +136,4 @@ class VoteRestControllerTest extends AbstractControllerTest {
                 .andDo(print())
                 .andExpect(VOTERESULTS_TO_MATCHER.contentJson(List.of(VOTE_RESULTS_TO)));
     }
-
-
-
 }

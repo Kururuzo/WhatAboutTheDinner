@@ -7,7 +7,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
 
-public class MenuTo extends AbstractBaseEntity {
+public class MenuTo extends BaseTo {
 
     @NotNull
     private LocalDate date;

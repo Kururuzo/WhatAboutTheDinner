@@ -23,24 +23,24 @@ public class RestaurantService {
         return checkNotFoundWithId(repository.findById(id).orElse(null), id);
     }
 
-    //    @Cacheable("restaurants")
     public List<Restaurant> getAll() {
         return repository.findAll(Sort.by(Sort.Direction.DESC, "id"));
     }
 
-    public Restaurant create (Restaurant restaurant) {
+    @Transactional
+    public Restaurant create(Restaurant restaurant) {
         Assert.notNull(restaurant, "Restaurant must not be null");
         return repository.save(restaurant);
     }
 
-    //    @CacheEvict(value = "restaurants", allEntries = true)
     @Transactional
-    public void update (Restaurant restaurant) {
+    public void update(Restaurant restaurant) {
         Assert.notNull(restaurant, "Restaurant must not be null");
         repository.save(restaurant);
     }
 
-    public void delete (int id) {
+    @Transactional
+    public void delete(int id) {
         checkNotFoundWithId(repository.delete(id) != 0, id);
     }
 }

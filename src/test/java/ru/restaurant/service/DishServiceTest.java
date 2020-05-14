@@ -43,17 +43,6 @@ class DishServiceTest extends AbstractServiceTest{
         DISH_MATCHER.assertMatch(service.get(newId), newDish);
     }
 
-//    @Test
-//    void duplicateDishCreate() throws Exception {
-//        assertThrows(DataAccessException.class, () ->
-//                service.create(new Dish(null, "Coffee", 50)));
-//    }
-
-    @Test
-    void createWithException() throws Exception {
-        //think about
-    }
-
     @Test
     void update() throws Exception {
         Dish updated = DishTestData.getUpdated();

@@ -1,7 +1,8 @@
 package ru.restaurant.model;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.springframework.util.CollectionUtils;
-
+import org.hibernate.annotations.Cache;
 import javax.persistence.*;
 import java.util.Collections;
 import java.util.Set;
@@ -11,6 +12,7 @@ import java.util.Set;
         uniqueConstraints = {@UniqueConstraint(columnNames = "name", name = "restaurants_unique_name_idx")})
 public class Restaurant extends AbstractNamedEntity {
 
+    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     @OrderBy("date DESC")
     private Set<Menu> menus;

@@ -11,7 +11,6 @@ import ru.restaurant.repository.UserRepository;
 import ru.restaurant.repository.VoteRepository;
 import ru.restaurant.to.VoteResultsTo;
 import ru.restaurant.util.VoteUtil;
-import ru.restaurant.util.exception.NotFoundException;
 
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -44,25 +43,23 @@ public class VoteService {
                 "Vote for this date not found");
     }
 
-    //    @Cacheable("votes")
     public List<Vote> getAllByUserId(int userId) {
         List<Vote> all = repository.findAllByUserId(userId);
         return all.stream().sorted(Comparator.comparing(AbstractBaseEntity::getId).reversed())
                 .collect(Collectors.toList());
     }
 
-    //    @Cacheable("votes")
     public List<Vote> getAll() {
         return repository.findAll(Sort.by(Sort.Direction.DESC, "id"));
     }
 
-    //    @Cacheable("menus")
     public List<Vote> getAllByDate(LocalDate date) {
         List<Vote> allByDate = repository.findAllByDate(date);
         allByDate.sort(Comparator.comparing(Vote::getId).reversed());
         return allByDate;
     }
 
+    @Transactional
     public Vote doVote(LocalDate date, int restaurantId, int userId) {
         Assert.notNull(date, "date must not be null");
         VoteUtil.checkIsDateExpired(date, restaurantId);
@@ -73,7 +70,7 @@ public class VoteService {
         User user = checkNotFoundWithId(userRepository.findById(userId).orElse(null), userId);
         Vote vote = findByDateAndUserId(date, userId);
 
-        if(vote == null) {
+        if (vote == null) {
             vote = new Vote(date, restaurant, user);
             return repository.save(vote);
         } else {
@@ -83,13 +80,12 @@ public class VoteService {
         }
     }
 
-
     public Vote findByDateAndUserId(LocalDate date, int userId) {
-//        return checkNotFoundWithId(repository.findByDateAndUserId(date, userId).orElse(null), userId);
         return repository.findByDateAndUserId(date, userId).orElse(null);
     }
 
-    public void delete (int id, int userId) {
+    @Transactional
+    public void delete(int id, int userId) {
         checkNotFoundWithId(repository.delete(id, userId), id);
     }
 
@@ -103,18 +99,19 @@ public class VoteService {
         return checkNotFoundWithId(repository.findById(id).orElse(null), id);
     }
 
-    public Vote create (Vote vote) {
+    @Transactional
+    public Vote create(Vote vote) {
         Assert.notNull(vote, "vote must not be null");
         return repository.save(vote);
     }
 
-    //    @CacheEvict(value = "votes", allEntries = true)
     @Transactional
-    public void update (Vote vote) {
+    public void update(Vote vote) {
         Assert.notNull(vote, "vote must not be null");
         repository.save(vote);
     }
 
+    @Transactional
     public void delete(int id) {
         checkNotFoundWithId(repository.delete(id) != 0, id);
     }

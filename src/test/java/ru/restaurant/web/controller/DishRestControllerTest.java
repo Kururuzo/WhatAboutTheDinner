@@ -5,8 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import ru.restaurant.DishTestData;
 import ru.restaurant.model.Dish;
 import ru.restaurant.service.DishService;
@@ -20,7 +18,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.restaurant.DishTestData.*;
 import static ru.restaurant.UserTestData.ADMIN;
-import static ru.restaurant.util.exception.ErrorType.DATA_ERROR;
 import static ru.restaurant.util.exception.ErrorType.VALIDATION_ERROR;
 import static ru.restaurant.web.TestUtil.readFromJson;
 import static ru.restaurant.web.TestUtil.userHttpBasic;

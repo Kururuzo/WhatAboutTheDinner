@@ -64,17 +64,18 @@ class RestaurantRestControllerTest extends AbstractControllerTest {
 
     @Test
     void createWithLocation() throws Exception {
-        Restaurant newDish = RestaurantTestData.getNew();
+        Restaurant newDRest = RestaurantTestData.getNew();
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(JsonUtil.writeValue(newDish))
-                .with(userHttpBasic(ADMIN)));
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newDRest))
+                .with(userHttpBasic(ADMIN)))
+                .andDo(print());
 
         Restaurant created = readFromJson(action, Restaurant.class);
         int newId = created.id();
-        newDish.setId(newId);
-        REST_MATCHER.assertMatch(created, newDish);
-        REST_MATCHER.assertMatch(service.get(newId), newDish);
+        newDRest.setId(newId);
+        REST_MATCHER.assertMatch(created, newDRest);
+        REST_MATCHER.assertMatch(service.get(newId), newDRest);
     }
 
     @Test
@@ -93,10 +94,12 @@ class RestaurantRestControllerTest extends AbstractControllerTest {
     @Test
     void update() throws Exception {
         Restaurant updated = RestaurantTestData.getUpdated();
-        perform(MockMvcRequestBuilders.put(REST_URL + REST_1_ID).contentType(MediaType.APPLICATION_JSON)
-                        .content(JsonUtil.writeValue(updated))
+        perform(MockMvcRequestBuilders.put(REST_URL + REST_1_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(updated))
                 .with(userHttpBasic(ADMIN)))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNoContent())
+                .andDo(print());
 
         REST_MATCHER.assertMatch(service.get(REST_1_ID), updated);
     }

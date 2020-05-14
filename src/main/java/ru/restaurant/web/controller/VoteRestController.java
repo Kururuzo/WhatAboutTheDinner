@@ -15,8 +15,7 @@ import ru.restaurant.model.Vote;
 import ru.restaurant.service.VoteService;
 import ru.restaurant.to.VoteResultsTo;
 import ru.restaurant.to.VoteTo;
-import ru.restaurant.util.VoteUtil;
-import ru.restaurant.util.exception.NotFoundException;
+import ru.restaurant.util.ValidationUtil;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -25,8 +24,6 @@ import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static ru.restaurant.util.ValidationUtil.assureIdConsistent;
 
 @RestController
 @RequestMapping(value = VoteRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -40,28 +37,28 @@ public class VoteRestController {
     VoteService service;
 
     @GetMapping(path = "/{id}")
-    public VoteTo get(@PathVariable int id, @AuthenticationPrincipal AuthorizedUser authUser) {
+    public Vote get(@PathVariable int id, @AuthenticationPrincipal AuthorizedUser authUser) {
         log.info("get vote with id={} fo userId={}", id, authUser.getId());
         Vote vote = service.get(id, authUser.getId());
-        return new VoteTo(vote);
+        return vote;
     }
 
     @GetMapping(params = "date")
-    public VoteTo getByDate(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+    public Vote getByDate(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
                             @AuthenticationPrincipal AuthorizedUser authUser) {
         log.info("get vote by date {} for user with id={}", date, authUser.getId());
-        return new VoteTo(service.getByDateAndUserId(date, authUser.getId()));
+        return service.getByDateAndUserId(date, authUser.getId());
     }
 
     @GetMapping
-    public List<VoteTo> getUsersAllVotes(@AuthenticationPrincipal AuthorizedUser authUser) {
+    public List<Vote> getUsersAllVotes(@AuthenticationPrincipal AuthorizedUser authUser) {
         log.info("get all votes for user with id={}", authUser.getId());
-        return VoteUtil.getTos(service.getAllByUserId(authUser.getId()));
+        return service.getAllByUserId(authUser.getId());
     }
 
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<VoteTo> doVote(@Valid @RequestBody int restaurantId,
+    @PostMapping(path = "/{restaurantId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<VoteTo> doVote(@Valid @PathVariable int restaurantId,
                                          @AuthenticationPrincipal AuthorizedUser authUser) {
         log.info("user id:{}, vote for restaurant id:{}", authUser.getId(), restaurantId);
         LocalDate today = LocalDate.now();
@@ -87,54 +84,7 @@ public class VoteRestController {
     public List<VoteResultsTo> getVoteResults(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         log.info("Get result of voting");
         List<VoteResultsTo> resultByDate = service.getResultByDate(date);
-        if (resultByDate.isEmpty()) {
-            throw new NotFoundException("No one voted on that date");
-        }
-
+        ValidationUtil.checkIsEmpty(resultByDate, "No one voted on that date");
         return resultByDate.stream().sorted(Comparator.comparing(VoteResultsTo::getVotes)).collect(Collectors.toList());
     }
-
-
-    // TODO add @AuthenticationPrincipal AuthorizedUser authUser
-    //check security
-//    @GetMapping
-//    public List<Vote> getAll() {
-//        log.info("get all votes");
-//        return service.getAll();
-//    }
-//
-//    @GetMapping(params = "date")
-//    public List<Vote> getByDate(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-//        log.info("get votes by date {}", date);
-//        return service.getAllByDate(date);
-//    }
-//
-//    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<Vote> createWithLocation(@Valid @RequestBody Vote vote) {
-//        log.info("create {}", vote);
-//        checkNew(vote);
-//        Vote created = service.create(vote);
-//        URI newResourceUri = ServletUriComponentsBuilder
-//                .fromCurrentContextPath()
-//                .path(REST_URL + "/{id}")
-//                .buildAndExpand(created.getId())
-//                .toUri();
-//        return ResponseEntity.created(newResourceUri).body(created);
-//    }
-//
-//    @PutMapping(value = "/{id}")
-//    @ResponseStatus(HttpStatus.NO_CONTENT)
-//    public void update(@Valid @RequestBody Vote vote, @PathVariable Integer id) {
-//        log.info("update {} with id={}", vote, id);
-//        assureIdConsistent(vote, id);
-//        service.update(vote);
-//    }
-//
-//    @DeleteMapping(path = "/{id}")
-//    @ResponseStatus(HttpStatus.NO_CONTENT)
-//    public void delete(@PathVariable int id) {
-//        log.info("delete menu {}", id);
-//        service.delete(id);
-//    }
-
 }

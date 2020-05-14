@@ -121,10 +121,12 @@ class MenuRestControllerTest extends AbstractControllerTest {
     @Test
     void update() throws Exception {
         Menu updated = MenuTestData.getUpdated();
-        perform(MockMvcRequestBuilders.put(REST_URL + MENU_1_ID).contentType(MediaType.APPLICATION_JSON)
-                        .content(JsonUtil.writeValue(updated))
+        perform(MockMvcRequestBuilders.put(REST_URL + MENU_1_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(updated))
                 .with(userHttpBasic(ADMIN)))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNoContent())
+                .andDo(print());
 
         MENU_MATCHER.assertMatch(service.get(MENU_1_ID), updated);
     }

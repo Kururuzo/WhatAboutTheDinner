@@ -99,12 +99,11 @@ class VoteAdminRestControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.put(REST_URL + VOTE_1_ID)
                 .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeValue(updated))
-                .with(userHttpBasic(USER))
-        )
-                .andExpect(status().isNoContent());
-
-        VOTE_MATCHER.assertMatch(service.get(VOTE_1_ID), updated);
+                .content(JsonUtil.writeValue(updated)))
+                .andExpect(status().isNoContent())
+                .andDo(print());
+        Vote vote = service.get(VOTE_1_ID);
+        VOTE_MATCHER.assertMatch(vote, updated);
     }
 
     @Test

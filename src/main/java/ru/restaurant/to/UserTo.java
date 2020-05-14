@@ -8,8 +8,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 
-//@JsonIgnoreProperties(ignoreUnknown = true)
-public class UserTo extends BaseTo implements Serializable {
+public class UserTo extends BaseTo {
 
     @NotBlank
     @Size(min = 2, max = 100)

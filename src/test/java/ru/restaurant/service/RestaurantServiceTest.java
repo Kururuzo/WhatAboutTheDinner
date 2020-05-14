@@ -51,11 +51,6 @@ class RestaurantServiceTest extends AbstractServiceTest{
     }
 
     @Test
-    void createWithException() throws Exception {
-        //think about
-    }
-
-    @Test
     void update() throws Exception {
         Restaurant updated = RestaurantTestData.getUpdated();
         service.update(new Restaurant(updated));

@@ -21,11 +21,6 @@ import static ru.restaurant.web.SecurityUtil.authUserId;
 public class ProfileRestController extends AbstractUserController {
     static final String REST_URL = "/rest/profile";
 
-//    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-//    public User get() {
-//        return super.get(authUserId());
-//    }
-
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public User get(@AuthenticationPrincipal AuthorizedUser authUser) {
         return super.get(authUser.getId());
@@ -40,33 +35,17 @@ public class ProfileRestController extends AbstractUserController {
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 
-//    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-//    @ResponseStatus(HttpStatus.NO_CONTENT)
-//    public void update(@RequestBody User user) {
-//        super.update(user, authUserId());
-//    }
-
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void update(@Valid @RequestBody UserTo userTo, @AuthenticationPrincipal AuthorizedUser authUser) {
-        super.update(createNewFromTo(userTo), authUser.getId());
+//        super.update(createNewFromTo(userTo), authUser.getId());
+        super.update(userTo, authUser.getId());
     }
-
-//    @DeleteMapping
-//    @ResponseStatus(HttpStatus.NO_CONTENT)
-//    public void delete() {
-//        super.delete(authUserId());
-//    }
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@AuthenticationPrincipal AuthorizedUser authUser) {
         super.delete(authUser.getId());
-    }
-
-    @GetMapping(value = "/text")
-    public String testUTF() {
-        return "Русский текст";
     }
 
 }

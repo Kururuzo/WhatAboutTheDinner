@@ -2,7 +2,6 @@ package ru.restaurant.service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import ru.restaurant.DishTestData;
 import ru.restaurant.RestaurantTestData;
 import ru.restaurant.UserTestData;
@@ -13,11 +12,9 @@ import ru.restaurant.repository.VoteRepository;
 import ru.restaurant.util.exception.NotFoundException;
 
 import java.time.LocalDate;
-import java.time.Month;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static ru.restaurant.UserTestData.USER;
 import static ru.restaurant.UserTestData.USER_ID;
 import static ru.restaurant.VoteTestData.*;
 
@@ -66,11 +63,6 @@ class VoteServiceTest extends AbstractServiceTest{
     }
 
     @Test
-    void createWithException() throws Exception {
-        //think about
-    }
-
-    @Test
     void update() throws Exception {
         Vote updated = getUpdated();
         service.update(new Vote(updated));
@@ -86,6 +78,6 @@ class VoteServiceTest extends AbstractServiceTest{
 
     @Test
     void deletedNotFound() throws Exception {
-        assertThrows(NotFoundException.class, () -> service.delete(1, USER_ID));
+        assertThrows(NotFoundException.class, () -> service.delete(1));
     }
 }

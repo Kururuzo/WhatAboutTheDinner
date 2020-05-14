@@ -1,5 +1,7 @@
 package ru.restaurant.service;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.data.domain.Sort;
@@ -13,6 +15,8 @@ import org.springframework.util.Assert;
 import ru.restaurant.AuthorizedUser;
 import ru.restaurant.model.User;
 import ru.restaurant.repository.UserRepository;
+import ru.restaurant.to.UserTo;
+import ru.restaurant.util.UserUtil;
 
 import java.util.List;
 
@@ -36,31 +40,38 @@ public class UserService implements UserDetailsService {
         return checkNotFoundWithId(repository.findById(id).orElse(null), id);
     }
 
-    //    @Cacheable("users")
+    @Cacheable("users")
     public User getByEmail(String email) {
         Assert.notNull(email, "email must not be null");
         return checkNotFound(repository.getByEmail(email), "email=" + email);
     }
 
-//    @Cacheable("users")
+    @Cacheable("users")
     public List<User> getAll() {
         return repository.findAll(Sort.by(Sort.DEFAULT_DIRECTION, "name"));
     }
 
-//    @CacheEvict(value = "users", allEntries = true)
+    @CacheEvict(value = "users", allEntries = true)
     public User create(User user) {
         Assert.notNull(user, "user must not be null");
         return repository.save(prepareToSave(user, passwordEncoder));
     }
 
-//    @CacheEvict(value = "users", allEntries = true)
+    @CacheEvict(value = "users", allEntries = true)
     @Transactional
     public void update(User user) {
         Assert.notNull(user, "user must not be null");
         checkNotFoundWithId(repository.save(user), user.getId());
     }
 
-//    @CacheEvict(value = "users", allEntries = true)
+    @CacheEvict(value = "users", allEntries = true)
+    @Transactional
+    public void update(UserTo userTo) {
+        User user = get(userTo.id());
+        prepareAndSave(UserUtil.updateFromTo(user, userTo));
+    }
+
+    @CacheEvict(value = "users", allEntries = true)
     @Transactional
     public void enable(int id, boolean enabled) {
         User user = checkNotFoundWithId(get(id), id);
@@ -68,11 +79,10 @@ public class UserService implements UserDetailsService {
         repository.save(user);
     }
 
-//    @CacheEvict(value = "users", allEntries = true)
+    @CacheEvict(value = "users", allEntries = true)
     public void delete(int id) {
         checkNotFoundWithId(repository.delete(id) != 0, id);
     }
-
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -80,5 +90,9 @@ public class UserService implements UserDetailsService {
         if (user == null)
             throw new UsernameNotFoundException(String.format("User %s is not found", email));
         return new AuthorizedUser(user);
+    }
+
+    private User prepareAndSave(User user) {
+        return repository.save(prepareToSave(user, passwordEncoder));
     }
 }
