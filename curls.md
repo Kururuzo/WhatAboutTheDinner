@@ -104,8 +104,12 @@
 #### get all votes (for Authenticated)
 `curl 'http://localhost:8080/rest/votes' --user user@yandex.ru:password`
 
-#### do or update vote (for Authenticated, menu for this day must exitsts)
+#### do vote (for Authenticated, menu for this day must exitsts)
 `curl -s -i -X POST -d '100013' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/rest/votes --user user@yandex.ru:password`
+
+#### update vote (for Authenticated, vote for this day must exitsts)
+`curl -X PUT http://localhost:8080/rest/votes/100025 --user user@yandex.ru:password`
+
 
 #### delete menu (for Authenticated)
 `curl -X DELETE -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/rest/votes/100013  --user user@yandex.ru:password`

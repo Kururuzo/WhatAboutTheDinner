@@ -111,7 +111,8 @@ After this commands you will start hosting website on page {Base URL} `localhost
 | GET    | Get                  | {Base URL}/votes/{voteId}                           | Authorized     |
 | GET    | Get by date          | {Base URL}/votes/?date={date}                       | Authorized     |
 | GET    | Get All              | {Base URL}/votes                                    | Authorized     |
-| POST   | Create or Update     | {Base URL}/votes                                    | Authorized     |
+| POST   | Create               | {Base URL}/votes                                    | Authorized     |
+| PUT    | Update               | {Base URL}/votes/{voteId}                           | Authorized     |
 | DELETE | Delete               | {Base URL}/votes/{voteId}                           | Authorized     |
 
 ---

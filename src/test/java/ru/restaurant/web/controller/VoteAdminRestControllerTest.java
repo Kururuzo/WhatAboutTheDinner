@@ -52,6 +52,7 @@ class VoteAdminRestControllerTest extends AbstractControllerTest {
     void getNotFound() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + "1")
                 .with(userHttpBasic(ADMIN)))
+                .andDo(print())
                 .andExpect(status().isUnprocessableEntity());
     }
 
@@ -88,7 +89,7 @@ class VoteAdminRestControllerTest extends AbstractControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(invalid))
                 .with(userHttpBasic(ADMIN)))
-                .andDo(print())
+//                .andDo(print())
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(errorType(VALIDATION_ERROR))
                 .andDo(print());

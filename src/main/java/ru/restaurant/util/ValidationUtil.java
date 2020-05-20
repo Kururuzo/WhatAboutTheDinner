@@ -1,10 +1,15 @@
 package ru.restaurant.util;
 
+import org.springframework.validation.BindException;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import ru.restaurant.HasId;
 import ru.restaurant.util.exception.IllegalRequestDataException;
 import ru.restaurant.util.exception.NotFoundException;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class ValidationUtil {
     private ValidationUtil() {
@@ -60,4 +65,7 @@ public class ValidationUtil {
         return result;
     }
 
+    public static String getMessage(Throwable e) {
+        return e.getLocalizedMessage() != null ? e.getLocalizedMessage() : e.getClass().getName();
+    }
 }

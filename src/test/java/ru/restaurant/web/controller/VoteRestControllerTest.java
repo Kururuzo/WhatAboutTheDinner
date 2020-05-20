@@ -93,7 +93,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void doDublicateVote() throws Exception {
+    void doDuplicateVote() throws Exception {
         LocalDate nowDate = LocalDate.now();
         Menu menu1 = menuService.create(new Menu(nowDate, RestaurantTestData.REST_1, DishTestData.DISH_1));
         Vote newVote = voteRepository.save(new Vote(nowDate, RestaurantTestData.REST_1, USER));
