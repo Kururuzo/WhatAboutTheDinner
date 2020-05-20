@@ -24,7 +24,7 @@ public class VoteAdminRestController {
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
-    public static final String REST_URL = "/rest/votes/admin";
+    public static final String REST_URL = "/rest/admin/votes";
 
     @Autowired
     VoteService service;
@@ -35,10 +35,10 @@ public class VoteAdminRestController {
         return service.get(id);
     }
 
-    @GetMapping(value = "byUser/{id}")
-    public List<Vote> getAllByUserId(@PathVariable int id) {
+    @GetMapping(params = "userId")
+    public List<Vote> getAllByUserId(@RequestParam int userId) {
         log.info("get all votes");
-        return service.getAllByUserId(id);
+        return service.getAllByUserId(userId);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)

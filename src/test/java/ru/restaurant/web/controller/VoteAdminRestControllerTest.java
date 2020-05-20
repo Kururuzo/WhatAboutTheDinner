@@ -57,10 +57,11 @@ class VoteAdminRestControllerTest extends AbstractControllerTest {
 
     @Test
     void getAllByUserId() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + "byUser/" + USER_ID)
+        perform(MockMvcRequestBuilders.get(VoteAdminRestController.REST_URL + "?userId=100000")
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andDo(print())
                 .andExpect(VOTE_MATCHER.contentJson(List.of(VOTE_1)));
     }
 

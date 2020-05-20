@@ -25,6 +25,8 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static ru.restaurant.util.ValidationUtil.assureIdConsistent;
+
 @RestController
 @RequestMapping(value = VoteRestController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class VoteRestController {
@@ -39,8 +41,7 @@ public class VoteRestController {
     @GetMapping(path = "/{id}")
     public Vote get(@PathVariable int id, @AuthenticationPrincipal AuthorizedUser authUser) {
         log.info("get vote with id={} fo userId={}", id, authUser.getId());
-        Vote vote = service.get(id, authUser.getId());
-        return vote;
+        return service.get(id, authUser.getId());
     }
 
     @GetMapping(params = "date")
@@ -56,9 +57,8 @@ public class VoteRestController {
         return service.getAllByUserId(authUser.getId());
     }
 
-
-    @PostMapping(path = "/{restaurantId}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<VoteTo> doVote(@Valid @PathVariable int restaurantId,
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<VoteTo> doVote(@RequestBody int restaurantId,
                                          @AuthenticationPrincipal AuthorizedUser authUser) {
         log.info("user id:{}, vote for restaurant id:{}", authUser.getId(), restaurantId);
         LocalDate today = LocalDate.now();
@@ -72,13 +72,22 @@ public class VoteRestController {
         return ResponseEntity.created(newResourceUri).body(new VoteTo(created));
     }
 
+    @PutMapping(value = "/{restaurantId}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void update(@PathVariable Integer restaurantId,
+                       @AuthenticationPrincipal AuthorizedUser authUser) {
+        log.info("user id:{}, update vote for restaurant id:{}", authUser.getId(), restaurantId);
+        LocalDate today = LocalDate.now();
+        Vote vote = service.getByDateAndUserId(today, authUser.getId());
+        service.updateVote(vote, restaurantId, authUser.getId(), today);
+    }
+
     @DeleteMapping(path = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id, @AuthenticationPrincipal AuthorizedUser authUser) {
         log.info("delete vote {} for user with id={}", id, authUser.getId());
         service.delete(id, authUser.getId());
     }
-
 
     @GetMapping(path = "/results", params = "date")
     public List<VoteResultsTo> getVoteResults(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {

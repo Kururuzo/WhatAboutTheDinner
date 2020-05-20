@@ -98,11 +98,11 @@ After this commands you will start hosting website on page {Base URL} `localhost
 
 | Method | Description          | URL                                                 | Access         |
 |--------|----------------------|-----------------------------------------------------|----------------|
-| GET    | Get                  | {Base URL}/votes/admin/{voteId}                     | Admin Only     |
-| GET    | Get All by User      | {Base URL}/votes/admin/byUser/{userId}              | Admin Only     |
-| POST   | Create               | {Base URL}/votes/admin                              | Admin Only     |
-| PUT    | Update               | {Base URL}/votes/admin/{voteId}                     | Admin Only     |
-| DELETE | Delete               | {Base URL}/votes/admin/{voteId}                     | Admin Only     |
+| GET    | Get                  | {Base URL}/admin/votes/{voteId}                     | Admin Only     |
+| GET    | Get All by User      | {Base URL}/admin/votes?userId={userId}              | Admin Only     |
+| POST   | Create               | {Base URL}/admin/votes                              | Admin Only     |
+| PUT    | Update               | {Base URL}/admin/votes/{voteId}                     | Admin Only     |
+| DELETE | Delete               | {Base URL}/admin/votes/{voteId}                     | Admin Only     |
 
 ### User Votes
 

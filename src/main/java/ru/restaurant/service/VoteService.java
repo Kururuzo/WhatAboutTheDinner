@@ -11,6 +11,7 @@ import ru.restaurant.repository.UserRepository;
 import ru.restaurant.repository.VoteRepository;
 import ru.restaurant.to.VoteResultsTo;
 import ru.restaurant.util.VoteUtil;
+import ru.restaurant.util.exception.IllegalRequestDataException;
 
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -70,14 +71,31 @@ public class VoteService {
         User user = checkNotFoundWithId(userRepository.findById(userId).orElse(null), userId);
         Vote vote = findByDateAndUserId(date, userId);
 
-        if (vote == null) {
+        if (vote != null) {
+            throw new IllegalRequestDataException("You already voted! If your decision changed, please, use PUT method");
+        } else {
             vote = new Vote(date, restaurant, user);
             return repository.save(vote);
-        } else {
-            VoteUtil.checkIsTimeExpired(date, restaurantId);
-            vote.setRestaurant(restaurant);
-            return repository.save(vote);
         }
+
+//        if (vote == null) {
+//            vote = new Vote(date, restaurant, user);
+//            return repository.save(vote);
+//        } else {
+//            VoteUtil.checkIsTimeExpired(date, restaurantId);
+//            vote.setRestaurant(restaurant);
+//            return repository.save(vote);
+//        }
+    }
+
+    @Transactional
+    public void updateVote(Vote vote, int restaurantId, int userId, LocalDate date) {
+        Assert.notNull(vote, "vote must not be null");
+        VoteUtil.checkIsDateExpired(date, restaurantId);
+        VoteUtil.checkIsTimeExpired(date, restaurantId);
+        Restaurant restaurant = checkNotFoundWithId(restaurantRepository.findById(restaurantId).orElse(null), restaurantId);
+        vote.setRestaurant(restaurant);
+        checkNotFoundWithId(repository.save(vote), vote.getId());
     }
 
     public Vote findByDateAndUserId(LocalDate date, int userId) {

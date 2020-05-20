@@ -26,6 +26,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.restaurant.UserTestData.USER;
 import static ru.restaurant.VoteTestData.*;
+import static ru.restaurant.util.exception.ErrorType.DATA_NOT_FOUND;
+import static ru.restaurant.util.exception.ErrorType.VALIDATION_ERROR;
 import static ru.restaurant.web.TestUtil.readFromJson;
 import static ru.restaurant.web.TestUtil.userHttpBasic;
 
@@ -82,12 +84,28 @@ class VoteRestControllerTest extends AbstractControllerTest {
         LocalDate nowDate = LocalDate.now();
         menuService.create(new Menu(nowDate, RestaurantTestData.REST_1, DishTestData.DISH_1));
 
-        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL + RestaurantTestData.REST_1_ID)
+        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .with(userHttpBasic(USER))
-                .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(String.valueOf(RestaurantTestData.REST_1_ID)))
                 .andDo(print())
                 .andExpect(status().isCreated());
     }
+
+    @Test
+    void doDublicateVote() throws Exception {
+        LocalDate nowDate = LocalDate.now();
+        Menu menu1 = menuService.create(new Menu(nowDate, RestaurantTestData.REST_1, DishTestData.DISH_1));
+        Vote newVote = voteRepository.save(new Vote(nowDate, RestaurantTestData.REST_1, USER));
+
+        perform(MockMvcRequestBuilders.post(REST_URL)
+                .with(userHttpBasic(USER))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(String.valueOf(RestaurantTestData.REST_1_ID)))
+                .andDo(print())
+                .andExpect(errorType(VALIDATION_ERROR));
+    }
+
 
     @Test
     void UpdateVoteForUser() throws Exception {
@@ -98,21 +116,20 @@ class VoteRestControllerTest extends AbstractControllerTest {
 
             Menu menu2 = menuService.create(new Menu(nowDate, RestaurantTestData.REST_2, DishTestData.DISH_2));
 
-            ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL + RestaurantTestData.REST_2.getId())
+            perform(MockMvcRequestBuilders.put(REST_URL + RestaurantTestData.REST_2.getId())
                     .with(userHttpBasic(USER))
                     .contentType(MediaType.APPLICATION_JSON))
                     .andDo(print())
-                    .andExpect(status().isCreated());
+                    .andExpect(status().isNoContent());
 
-            VoteTo returned = readFromJson(action, VoteTo.class);
-            newVote.setId(returned.getId());
-            VOTE_TO_MATCHER.assertMatch(new VoteTo(newVote), returned);
-
+            Vote updated = voteRepository.getOne(newVote.getId());
+            newVote.setRestaurant(RestaurantTestData.REST_2);
+            VOTE_MATCHER.assertMatch(updated, newVote);
         } else {
             LocalDate nowDate = LocalDate.now();
             voteRepository.save(new Vote(nowDate, RestaurantTestData.REST_1, USER));
 
-            ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL + RestaurantTestData.REST_2.getId())
+            perform(MockMvcRequestBuilders.put(REST_URL + RestaurantTestData.REST_2.getId())
                     .with(userHttpBasic(USER))
                     .contentType(MediaType.APPLICATION_JSON))
                     .andDo(print())
