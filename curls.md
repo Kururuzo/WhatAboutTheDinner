@@ -38,16 +38,16 @@
 ######## ======= Dishes =======
 
 #### get dish (for Authenticated)
-`curl 'http://localhost:8080/rest/dishes/100002' --user 'user@yandex.ru:password'`
+`curl http://localhost:8080/rest/dishes/100015 --user user@yandex.ru:password`
 
 #### get all dishes (for Authenticated)
 `curl 'http://localhost:8080/rest/dishes' --user 'user@yandex.ru:password'`
 
 #### create dish (for Admin only)
-`curl -s -i -X POST -d '{"name" : "Boiled egg", "price" : 2.0}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/rest/dishes --user admin@gmail.com:admin`
+`curl -s -i -X POST -d '{"name" : "Boiled egg", "price" : 2.0, "restaurant":{"id":100002,"name":"Lucky Pizza"}}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/rest/dishes --user admin@gmail.com:admin`
 
 #### update dish (for Admin only)
-`curl -X PUT -H 'Content-Type:application/json;charset=UTF-8' -d '{"name" : "Boiled big egg", "price" : 3.0}' http://localhost:8080/rest/dishes/100028 --user admin@gmail.com:admin`
+`curl -X PUT -H 'Content-Type:application/json;charset=UTF-8' -d '{"name" : "Boiled big egg1", "price" : 3.0, "restaurant":{"id":100002,"name":"Lucky Pizza"}}' http://localhost:8080/rest/dishes/100031 --user admin@gmail.com:admin`
 
 #### delete dish (for Admin only)
 `curl -X DELETE -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/rest/dishes/100028 --user admin@gmail.com:admin`
@@ -109,7 +109,6 @@
 
 #### update vote (for Authenticated, vote for this day must exitsts)
 `curl -X PUT http://localhost:8080/rest/votes/100025 --user user@yandex.ru:password`
-
 
 #### delete menu (for Authenticated)
 `curl -X DELETE -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/rest/votes/100013  --user user@yandex.ru:password`

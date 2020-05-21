@@ -72,7 +72,7 @@ class MenuServiceTest extends AbstractServiceTest{
     @Test
     public void delete() throws Exception {
         service.delete(MENU_1_ID);
-        MENU_MATCHER.assertMatch(service.getAll(), List.of(MENU_9, MENU_8, MENU_7, MENU_6, MENU_5, MENU_4, MENU_3, MENU_2));
+        MENU_MATCHER.assertMatch(service.getAll(), List.of(MENU_12, MENU_11, MENU_10, MENU_9, MENU_8, MENU_7, MENU_6, MENU_5, MENU_4, MENU_3, MENU_2));
     }
 
     @Test

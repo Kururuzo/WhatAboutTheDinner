@@ -17,12 +17,12 @@ public class VoteTestData {
     public static TestMatcher<VoteResultsTo> VOTERESULTS_TO_MATCHER = TestMatcher.usingFieldsComparator(VoteResultsTo.class);
     public static TestMatcher<VoteTo> VOTE_TO_MATCHER = TestMatcher.usingFieldsComparator(VoteTo.class, "user");
 
-    public static final int VOTE_1_ID = START_SEQ + 25;
+    public static final int VOTE_1_ID = START_SEQ + 29;
 
-    public static final Vote VOTE_1 = new Vote(START_SEQ + 25, LocalDate.of(2020, Month.APRIL,1), REST_1, USER);
-    public static final Vote VOTE_2 = new Vote(START_SEQ + 26, LocalDate.of(2020, Month.APRIL,1), REST_1, ADMIN);
+    public static final Vote VOTE_1 = new Vote(START_SEQ + 29, LocalDate.of(2020, Month.APRIL,1), REST_1, USER);
+    public static final Vote VOTE_2 = new Vote(START_SEQ + 30, LocalDate.of(2020, Month.APRIL,1), REST_1, ADMIN);
 
-    public static final Vote VOTE_UPDATABLE_1 = new Vote(START_SEQ + 27, LocalDate.now(), REST_1, USER);
+    public static final Vote VOTE_UPDATABLE_1 = new Vote(START_SEQ + 31, LocalDate.now(), REST_1, USER);
 
     public static final List<Vote> VOTES = List.of(VOTE_2, VOTE_1);
 

@@ -102,7 +102,8 @@ class MenuRestControllerTest extends AbstractControllerTest {
         Menu returned = readFromJson(action, Menu.class);
         menu.setId(returned.getId());
 
-        MENU_MATCHER.assertMatch(service.getAll(), menu, MENU_9, MENU_8, MENU_7, MENU_6, MENU_5, MENU_4, MENU_3, MENU_2, MENU_1);
+        MENU_MATCHER.assertMatch(service.getAll(), menu, MENU_12, MENU_11, MENU_10, MENU_9, MENU_8, MENU_7, MENU_6,
+                MENU_5, MENU_4, MENU_3, MENU_2, MENU_1);
     }
 
     @Test

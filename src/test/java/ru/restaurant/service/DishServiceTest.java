@@ -53,7 +53,7 @@ class DishServiceTest extends AbstractServiceTest{
     @Test
     public void delete() throws Exception {
         service.delete(DISH_1_ID);
-        DISH_MATCHER.assertMatch(service.getAll(), List.of(DISH_11, DISH_10, DISH_9, DISH_8, DISH_7,
+        DISH_MATCHER.assertMatch(service.getAll(), List.of(DISH_12, DISH_11, DISH_10, DISH_9, DISH_8, DISH_7,
                 DISH_6, DISH_5, DISH_4, DISH_3, DISH_2));
     }
 

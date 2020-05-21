@@ -67,7 +67,8 @@ class DishRestControllerTest extends AbstractControllerTest {
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(newDish))
-                .with(userHttpBasic(ADMIN)));
+                .with(userHttpBasic(ADMIN)))
+                .andDo(print());
 
         Dish created = readFromJson(action, Dish.class);
         int newId = created.id();

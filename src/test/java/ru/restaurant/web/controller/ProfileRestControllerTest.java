@@ -7,7 +7,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import ru.restaurant.UserTestData;
 import ru.restaurant.model.User;
 import ru.restaurant.service.UserService;
 import ru.restaurant.to.UserTo;
