@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 import static ru.restaurant.util.ValidationUtil.checkNotFound;
 import static ru.restaurant.util.ValidationUtil.checkNotFoundWithId;
 
-@Service("voteService")
+@Service
 public class VoteService {
     private final VoteRepository repository;
     private final RestaurantRepository restaurantRepository;
@@ -36,11 +36,11 @@ public class VoteService {
     }
 
     public Vote get(int id, int userId) {
-        return checkNotFoundWithId(repository.findByIdAndUserId(id, userId).orElse(null), id);
+        return checkNotFoundWithId(repository.findByIdAndUserId(id, userId), id);
     }
 
     public Vote getByDateAndUserId(LocalDate date, int userId) {
-        return checkNotFound(repository.findByDateAndUserId(date, userId).orElse(null),
+        return checkNotFound(repository.findByDateAndUserId(date, userId),
                 "Vote for this date not found");
     }
 
@@ -77,15 +77,6 @@ public class VoteService {
             vote = new Vote(date, restaurant, user);
             return repository.save(vote);
         }
-
-//        if (vote == null) {
-//            vote = new Vote(date, restaurant, user);
-//            return repository.save(vote);
-//        } else {
-//            VoteUtil.checkIsTimeExpired(date, restaurantId);
-//            vote.setRestaurant(restaurant);
-//            return repository.save(vote);
-//        }
     }
 
     @Transactional
@@ -99,7 +90,7 @@ public class VoteService {
     }
 
     public Vote findByDateAndUserId(LocalDate date, int userId) {
-        return repository.findByDateAndUserId(date, userId).orElse(null);
+        return repository.findByDateAndUserId(date, userId);
     }
 
     @Transactional
@@ -114,7 +105,7 @@ public class VoteService {
 
     //----------------------------- ADMIN --------------------------------
     public Vote get(int id) {
-        return checkNotFoundWithId(repository.findById(id).orElse(null), id);
+        return checkNotFoundWithId(repository.getById(id), id);
     }
 
     @Transactional

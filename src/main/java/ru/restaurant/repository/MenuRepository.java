@@ -21,7 +21,7 @@ public interface MenuRepository extends JpaRepository<Menu, Integer> {
     @Query("DELETE FROM Menu m WHERE m.id=:id")
     int delete(@Param("id") int id);
 
-    Optional<Menu> findById(int id);
+    Menu getById(int id);
 
     @Transactional
     @Override

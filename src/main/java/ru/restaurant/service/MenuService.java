@@ -31,7 +31,7 @@ public class MenuService {
 
     @Cacheable("menuItem")
     public Menu get(int id) {
-        return checkNotFoundWithId(repository.findById(id).orElse(null), id);
+        return checkNotFoundWithId(repository.getById(id), id);
     }
 
     public List<Menu> getAll() {

@@ -31,12 +31,14 @@ public interface VoteRepository extends JpaRepository<Vote, Integer> {
     @Override
     <S extends Vote> S save(S entity);
 
+    Vote getById(int id);
+
     List<Vote> findAllByDate(LocalDate date);
     List<Vote> findAllByUserId(int userId);
 
-    Optional<Vote> findByIdAndUserId(int id, int userId);
+    Vote findByIdAndUserId(int id, int userId);
     @Query("SELECT v FROM Vote v WHERE v.date=:date AND v.user.id=:userId")
-    Optional<Vote> findByDateAndUserId(@Param("date") LocalDate date, @Param("userId")Integer userId);
+    Vote findByDateAndUserId(@Param("date") LocalDate date, @Param("userId")Integer userId);
 
     @Query("SELECT new ru.restaurant.to.VoteResultsTo(v.restaurant.name, COUNT(v)) FROM Vote v WHERE v.date=:date GROUP BY v.restaurant.name")
     List<VoteResultsTo> getResultByDate(@Param("date") LocalDate date);

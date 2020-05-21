@@ -49,7 +49,8 @@ class DishRestControllerTest extends AbstractControllerTest {
     void getNotFound() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + "1")
                 .with(userHttpBasic(ADMIN)))
-                .andExpect(status().isUnprocessableEntity());
+                .andExpect(status().isUnprocessableEntity())
+                .andDo(print());
     }
 
     @Test

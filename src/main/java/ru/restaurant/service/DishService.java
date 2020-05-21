@@ -11,7 +11,7 @@ import java.util.List;
 
 import static ru.restaurant.util.ValidationUtil.checkNotFoundWithId;
 
-@Service("dishService")
+@Service
 public class DishService {
     private final DishRepository repository;
 
@@ -20,7 +20,7 @@ public class DishService {
     }
 
     public Dish get(int id) {
-        return checkNotFoundWithId(repository.findById(id).orElse(null), id);
+        return checkNotFoundWithId(repository.getById(id), id);
     }
 
     public List<Dish> getAll() {

@@ -24,7 +24,7 @@ import static ru.restaurant.util.UserUtil.prepareToSave;
 import static ru.restaurant.util.ValidationUtil.checkNotFoundWithId;
 import static ru.restaurant.util.ValidationUtil.checkNotFound;
 
-@Service("userService")
+@Service
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class UserService implements UserDetailsService {
 
@@ -37,7 +37,7 @@ public class UserService implements UserDetailsService {
     }
 
     public User get(int id) {
-        return checkNotFoundWithId(repository.findById(id).orElse(null), id);
+        return checkNotFoundWithId(repository.getById(id), id);
     }
 
     public User getByEmail(String email) {

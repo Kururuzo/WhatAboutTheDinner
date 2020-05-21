@@ -13,7 +13,7 @@ import java.util.List;
 
 import static ru.restaurant.util.ValidationUtil.checkNotFoundWithId;
 
-@Service("restaurantService")
+@Service
 public class RestaurantService {
     private final RestaurantRepository repository;
 
@@ -23,7 +23,7 @@ public class RestaurantService {
 
     @Cacheable("restaurants")
     public Restaurant get(int id) {
-        return checkNotFoundWithId(repository.findById(id).orElse(null), id);
+        return checkNotFoundWithId(repository.getById(id), id);
     }
 
     public List<Restaurant> getAll() {
