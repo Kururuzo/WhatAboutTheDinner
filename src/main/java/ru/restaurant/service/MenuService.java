@@ -1,5 +1,7 @@
 package ru.restaurant.service;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +29,7 @@ public class MenuService {
         this.repository = repository;
     }
 
+    @Cacheable("menuItem")
     public Menu get(int id) {
         return checkNotFoundWithId(repository.findById(id).orElse(null), id);
     }
@@ -45,6 +48,7 @@ public class MenuService {
         return repository.findByDateWithRestaurants(date);
     }
 
+    @Cacheable("offer")
     public List<MenuTo> getOfferByDate(LocalDate date) {
         List<Menu> allMenuByDate = findByDateWithRestaurants(date);
         ValidationUtil.checkIsEmpty(allMenuByDate, "Menus for this date not found.");
@@ -60,18 +64,21 @@ public class MenuService {
                 .collect(Collectors.toList());
     }
 
+    @CacheEvict(value = {"offer", "menuItem"}, key = "#menu")
     @Transactional
     public Menu create(Menu menu) {
         Assert.notNull(menu, "menu must not be null");
         return repository.save(menu);
     }
 
+    @CacheEvict(value = {"offer", "menuItem"}, key = "#menu")
     @Transactional
     public void update(Menu menu) {
         Assert.notNull(menu, "menu must not be null");
         repository.save(menu);
     }
 
+    @CacheEvict(value = "menuItem", allEntries = true)
     @Transactional
     public void delete(int id) {
         checkNotFoundWithId(repository.delete(id) != 0, id);

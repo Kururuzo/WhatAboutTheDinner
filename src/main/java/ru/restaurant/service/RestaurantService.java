@@ -1,5 +1,7 @@
 package ru.restaurant.service;
 
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,6 +21,7 @@ public class RestaurantService {
         this.repository = repository;
     }
 
+    @Cacheable("restaurants")
     public Restaurant get(int id) {
         return checkNotFoundWithId(repository.findById(id).orElse(null), id);
     }
@@ -27,18 +30,21 @@ public class RestaurantService {
         return repository.findAll(Sort.by(Sort.Direction.DESC, "id"));
     }
 
+    @CacheEvict(value = "restaurants", key = "#restaurant")
     @Transactional
     public Restaurant create(Restaurant restaurant) {
         Assert.notNull(restaurant, "Restaurant must not be null");
         return repository.save(restaurant);
     }
 
+    @CacheEvict(value = "restaurants", key = "#restaurant")
     @Transactional
     public void update(Restaurant restaurant) {
         Assert.notNull(restaurant, "Restaurant must not be null");
         repository.save(restaurant);
     }
 
+    @CacheEvict(value = "restaurants", allEntries = true)
     @Transactional
     public void delete(int id) {
         checkNotFoundWithId(repository.delete(id) != 0, id);

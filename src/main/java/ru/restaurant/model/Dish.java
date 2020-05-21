@@ -52,12 +52,4 @@ public class Dish extends AbstractNamedEntity{
         this.price = price;
     }
 
-    @Override
-    public String toString() {
-        return "Dish{" +
-                "id=" + id +
-                ", price=" + price +
-                ", name='" + name +
-                '}';
-    }
 }

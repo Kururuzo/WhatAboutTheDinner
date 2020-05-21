@@ -1,5 +1,7 @@
 package ru.restaurant.model;
 
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
@@ -8,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Entity
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 @Table(name = "menus",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"date", "restaurant_id", "dish_id"},
                 name = "menus_unique_date_restaurant_dish_idx")}
@@ -74,12 +77,5 @@ public class Menu extends AbstractBaseEntity {
         this.dish = dish;
     }
 
-    @Override
-    public String toString() {
-        return "Menu{" +
-                "date=" + date +
-                ", restaurant=" + restaurant +
-                ", dish=" + dish +
-                '}';
-    }
+
 }

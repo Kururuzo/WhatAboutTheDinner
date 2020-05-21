@@ -40,24 +40,22 @@ public class UserService implements UserDetailsService {
         return checkNotFoundWithId(repository.findById(id).orElse(null), id);
     }
 
-    @Cacheable("users")
     public User getByEmail(String email) {
         Assert.notNull(email, "email must not be null");
         return checkNotFound(repository.getByEmail(email), "email=" + email);
     }
 
-    @Cacheable("users")
     public List<User> getAll() {
         return repository.findAll(Sort.by(Sort.DEFAULT_DIRECTION, "name"));
     }
 
-    @CacheEvict(value = "users", allEntries = true)
+    @CacheEvict(value = "users", key = "#user")
     public User create(User user) {
         Assert.notNull(user, "user must not be null");
         return repository.save(prepareToSave(user, passwordEncoder));
     }
 
-    @CacheEvict(value = "users", allEntries = true)
+    @CacheEvict(value = "users", key = "#user")
     @Transactional
     public void update(User user) {
         Assert.notNull(user, "user must not be null");
