@@ -1,12 +1,10 @@
 package ru.restaurant.to;
 
-import ru.restaurant.HasId;
 import ru.restaurant.model.User;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 
 public class UserTo extends BaseTo {
 
@@ -72,5 +70,4 @@ public class UserTo extends BaseTo {
                 ", email='" + email + '\'' +
                 '}';
     }
-
 }

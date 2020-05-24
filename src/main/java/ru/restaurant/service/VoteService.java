@@ -1,5 +1,6 @@
 package ru.restaurant.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,6 +15,7 @@ import ru.restaurant.util.VoteUtil;
 import ru.restaurant.util.exception.IllegalRequestDataException;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,16 +26,19 @@ import static ru.restaurant.util.ValidationUtil.checkNotFoundWithId;
 @Service
 public class VoteService {
     private final VoteRepository repository;
-    private final RestaurantRepository restaurantRepository;
-    private final UserRepository userRepository;
-    private final MenuRepository menuRepository;
 
     public VoteService(VoteRepository repository, RestaurantRepository restaurantRepository, UserRepository userRepository, MenuRepository menuRepository) {
         this.repository = repository;
-        this.restaurantRepository = restaurantRepository;
-        this.userRepository = userRepository;
-        this.menuRepository = menuRepository;
     }
+
+    @Autowired
+    MenuService menuService;
+
+    @Autowired
+    RestaurantService restaurantService;
+
+    @Autowired
+    UserService userService;
 
     public Vote get(int id, int userId) {
         return checkNotFoundWithId(repository.findByIdAndUserId(id, userId), id);
@@ -63,12 +68,14 @@ public class VoteService {
     @Transactional
     public Vote doVote(LocalDate date, int restaurantId, int userId) {
         Assert.notNull(date, "date must not be null");
-        VoteUtil.checkIsDateExpired(date, restaurantId);
-        checkNotFound(menuRepository.findByDateAndRestaurantId(date, restaurantId).orElse(null),
-                "Menu for this restaurant and date was not found");
 
-        Restaurant restaurant = checkNotFoundWithId(restaurantRepository.findById(restaurantId).orElse(null), restaurantId);
-        User user = checkNotFoundWithId(userRepository.findById(userId).orElse(null), userId);
+        LocalDateTime now = LocalDateTime.now();
+        VoteUtil.checkIsDateExpired(date, now, restaurantId);
+
+        MenuItem menuItem = menuService.findByDateAndRestaurantId(date, restaurantId);
+        Restaurant restaurant = restaurantService.get(restaurantId);
+        User user = userService.get(userId);
+
         Vote vote = findByDateAndUserId(date, userId);
 
         if (vote != null) {
@@ -82,9 +89,12 @@ public class VoteService {
     @Transactional
     public void updateVote(Vote vote, int restaurantId, int userId, LocalDate date) {
         Assert.notNull(vote, "vote must not be null");
-        VoteUtil.checkIsDateExpired(date, restaurantId);
-        VoteUtil.checkIsTimeExpired(date, restaurantId);
-        Restaurant restaurant = checkNotFoundWithId(restaurantRepository.findById(restaurantId).orElse(null), restaurantId);
+
+        LocalDateTime now = LocalDateTime.now();
+        VoteUtil.checkIsDateAndTimeExpired(date, now, restaurantId);
+
+        //todo - user check??
+        Restaurant restaurant = restaurantService.get(restaurantId);
         vote.setRestaurant(restaurant);
         checkNotFoundWithId(repository.save(vote), vote.getId());
     }

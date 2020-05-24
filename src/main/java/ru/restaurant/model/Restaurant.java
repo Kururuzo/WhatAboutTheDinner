@@ -13,10 +13,9 @@ import java.util.Set;
         uniqueConstraints = {@UniqueConstraint(columnNames = "name", name = "restaurants_unique_name_idx")})
 public class Restaurant extends AbstractNamedEntity {
 
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     @OrderBy("date DESC")
-    private Set<Menu> menus;
+    private Set<MenuItem> menuItems;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     @OrderBy("date DESC")
@@ -33,12 +32,12 @@ public class Restaurant extends AbstractNamedEntity {
         super(id, name);
     }
 
-    public Set<Menu> getMenus() {
-        return menus;
+    public Set<MenuItem> getMenuItems() {
+        return menuItems;
     }
 
-    public void setMenus(Set<Menu> menus) {
-        this.menus = CollectionUtils.isEmpty(menus) ? Collections.emptySet() : menus;
+    public void setMenuItems(Set<MenuItem> menuItems) {
+        this.menuItems = CollectionUtils.isEmpty(menuItems) ? Collections.emptySet() : menuItems;
     }
 
     public Set<Vote> getVotes() {

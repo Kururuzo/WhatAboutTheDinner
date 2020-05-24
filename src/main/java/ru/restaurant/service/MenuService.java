@@ -6,12 +6,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
-import ru.restaurant.model.Menu;
+import ru.restaurant.model.MenuItem;
 import ru.restaurant.model.Restaurant;
 import ru.restaurant.repository.MenuRepository;
 import ru.restaurant.to.MenuTo;
 import ru.restaurant.to.RestaurantTo;
-import ru.restaurant.util.ValidationUtil;
 
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -30,52 +29,54 @@ public class MenuService {
     }
 
     @Cacheable("menuItem")
-    public Menu get(int id) {
+    public MenuItem get(int id) {
         return checkNotFoundWithId(repository.getById(id), id);
     }
 
-    public List<Menu> getAll() {
+    public MenuItem findByDateAndRestaurantId(LocalDate date, int restaurantId) {
+        return checkNotFoundWithId(repository.findByDateAndRestaurantId(date,restaurantId), restaurantId);
+    }
+
+    public List<MenuItem> getAll() {
         return repository.findAll(Sort.by(Sort.Direction.DESC, "id"));
     }
 
-    public List<Menu> getAllByDate(LocalDate date) {
-        List<Menu> allByDate = repository.findAllByDate(date);
-        allByDate.sort(Comparator.comparing(Menu::getId).reversed());
-        return allByDate;
+    public List<MenuItem> getAllByDate(LocalDate date) {
+        return repository.findAllByDateOrderByIdDesc(date);
     }
 
-    public List<Menu> findByDateWithRestaurants(LocalDate date) {
+    public List<MenuItem> findByDateWithRestaurants(LocalDate date) {
         return repository.findByDateWithRestaurants(date);
     }
 
     @Cacheable("offer")
     public List<MenuTo> getOfferByDate(LocalDate date) {
-        List<Menu> allMenuByDate = findByDateWithRestaurants(date);
-        ValidationUtil.checkIsEmpty(allMenuByDate, "Menus for this date not found.");
+        List<MenuItem> allMenuItemByDate = findByDateWithRestaurants(date);
+//        ValidationUtil.checkIsEmpty(allMenuByDate, "Menus for this date not found.");
 
-        Map<Restaurant, List<Menu>> restsAndMenusMap = allMenuByDate.stream()
-                .collect(Collectors.groupingBy(Menu::getRestaurant));
+        Map<Restaurant, List<MenuItem>> restsAndMenusMap = allMenuItemByDate.stream()
+                .collect(Collectors.groupingBy(MenuItem::getRestaurant));
 
         return restsAndMenusMap.entrySet().stream().map(en -> new MenuTo(
                 date,
                 new RestaurantTo(en.getKey()),
-                en.getValue().stream().map(Menu::getDish).collect(Collectors.toList())))
+                en.getValue().stream().map(MenuItem::getDish).collect(Collectors.toList())))
                 .sorted(Comparator.comparing(menuTo -> menuTo.getRestaurant().getId()))
                 .collect(Collectors.toList());
     }
 
-    @CacheEvict(value = {"offer", "menuItem"}, key = "#menu")
+    @CacheEvict(value = {"offer", "menuItem"}, key = "#menuItem")
     @Transactional
-    public Menu create(Menu menu) {
-        Assert.notNull(menu, "menu must not be null");
-        return repository.save(menu);
+    public MenuItem create(MenuItem menuItem) {
+        Assert.notNull(menuItem, "menu must not be null");
+        return repository.save(menuItem);
     }
 
-    @CacheEvict(value = {"offer", "menuItem"}, key = "#menu")
+    @CacheEvict(value = {"offer", "menuItem"}, key = "#menuItem")
     @Transactional
-    public void update(Menu menu) {
-        Assert.notNull(menu, "menu must not be null");
-        repository.save(menu);
+    public void update(MenuItem menuItem) {
+        Assert.notNull(menuItem, "menu must not be null");
+        repository.save(menuItem);
     }
 
     @CacheEvict(value = "menuItem", allEntries = true)

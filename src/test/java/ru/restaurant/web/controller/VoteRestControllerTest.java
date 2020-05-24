@@ -7,18 +7,17 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.restaurant.DishTestData;
 import ru.restaurant.RestaurantTestData;
-import ru.restaurant.VoteTestData;
-import ru.restaurant.model.Menu;
+import ru.restaurant.model.MenuItem;
 import ru.restaurant.model.Vote;
 import ru.restaurant.repository.VoteRepository;
 import ru.restaurant.service.MenuService;
 import ru.restaurant.service.VoteService;
-import ru.restaurant.to.VoteTo;
 import ru.restaurant.web.AbstractControllerTest;
-import ru.restaurant.web.json.JsonUtil;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.Month;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -26,9 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.restaurant.UserTestData.USER;
 import static ru.restaurant.VoteTestData.*;
-import static ru.restaurant.util.exception.ErrorType.DATA_NOT_FOUND;
 import static ru.restaurant.util.exception.ErrorType.VALIDATION_ERROR;
-import static ru.restaurant.web.TestUtil.readFromJson;
 import static ru.restaurant.web.TestUtil.userHttpBasic;
 
 class VoteRestControllerTest extends AbstractControllerTest {
@@ -83,7 +80,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
     @Test
     void doVote() throws Exception {
         LocalDate nowDate = LocalDate.now();
-        menuService.create(new Menu(nowDate, RestaurantTestData.REST_1, DishTestData.DISH_1));
+        menuService.create(new MenuItem(nowDate, RestaurantTestData.REST_1, DishTestData.DISH_1));
 
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .with(userHttpBasic(USER))
@@ -96,7 +93,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
     @Test
     void doDuplicateVote() throws Exception {
         LocalDate nowDate = LocalDate.now();
-        Menu menu1 = menuService.create(new Menu(nowDate, RestaurantTestData.REST_1, DishTestData.DISH_1));
+        MenuItem menuItem1 = menuService.create(new MenuItem(nowDate, RestaurantTestData.REST_1, DishTestData.DISH_1));
         Vote newVote = voteRepository.save(new Vote(nowDate, RestaurantTestData.REST_1, USER));
 
         perform(MockMvcRequestBuilders.post(REST_URL)
@@ -107,15 +104,14 @@ class VoteRestControllerTest extends AbstractControllerTest {
                 .andExpect(errorType(VALIDATION_ERROR));
     }
 
-
     @Test
-    void UpdateVoteForUser() throws Exception {
+    void updateVoteForUser() throws Exception {
         if(LocalTime.now().isBefore(LocalTime.of(11, 0))) {
             LocalDate nowDate = LocalDate.now();
-            Menu menu1 = menuService.create(new Menu(nowDate, RestaurantTestData.REST_1, DishTestData.DISH_1));
+            MenuItem menu1 = menuService.create(new MenuItem(nowDate, RestaurantTestData.REST_1, DishTestData.DISH_1));
             Vote newVote = voteRepository.save(new Vote(nowDate, RestaurantTestData.REST_1, USER));
 
-            Menu menu2 = menuService.create(new Menu(nowDate, RestaurantTestData.REST_2, DishTestData.DISH_2));
+            MenuItem menu2 = menuService.create(new MenuItem(nowDate, RestaurantTestData.REST_2, DishTestData.DISH_2));
 
             perform(MockMvcRequestBuilders.put(REST_URL + RestaurantTestData.REST_2.getId())
                     .with(userHttpBasic(USER))

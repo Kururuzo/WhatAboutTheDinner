@@ -3,7 +3,13 @@ package ru.restaurant.to;
 import ru.restaurant.model.AbstractNamedEntity;
 import ru.restaurant.model.Restaurant;
 
-public class RestaurantTo extends AbstractNamedEntity{
+public class RestaurantTo extends BaseTo{
+    private String name;
+
+    public RestaurantTo(Integer id, String name) {
+        super(id);
+        this.name = name;
+    }
 
     public RestaurantTo() {
     }
@@ -11,10 +17,6 @@ public class RestaurantTo extends AbstractNamedEntity{
     public RestaurantTo(Restaurant r) {
         this.id = r.getId();
         this.name = r.getName();
-    }
-
-    public RestaurantTo(Integer id, String name) {
-        super(id, name);
     }
 
     @Override

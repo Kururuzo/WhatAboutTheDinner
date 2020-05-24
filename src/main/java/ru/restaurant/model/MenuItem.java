@@ -11,11 +11,11 @@ import java.time.LocalDate;
 
 @Entity
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
-@Table(name = "menus",
+@Table(name = "menuItems",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"date", "restaurant_id", "dish_id"},
                 name = "menus_unique_date_restaurant_dish_idx")}
 )
-public class Menu extends AbstractBaseEntity {
+public class MenuItem extends AbstractBaseEntity {
 
     @NotNull
     @Column(name = "date", nullable = false, columnDefinition = "timestamp default now()")
@@ -33,20 +33,20 @@ public class Menu extends AbstractBaseEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Dish dish;
 
-    public Menu() {
+    public MenuItem() {
     }
 
-    public Menu(Menu m) {
+    public MenuItem(MenuItem m) {
         this(m.getId(), m.getDate(), m.getRestaurant(), m.getDish());
     }
 
-    public Menu(@NotNull LocalDate date, @NotNull Restaurant restaurant, @NotNull Dish dish) {
+    public MenuItem(@NotNull LocalDate date, @NotNull Restaurant restaurant, @NotNull Dish dish) {
         this.date = date;
         this.restaurant = restaurant;
         this.dish = dish;
     }
 
-    public Menu(Integer id, @NotNull LocalDate date, @NotNull Restaurant restaurant, @NotNull Dish dish) {
+    public MenuItem(Integer id, @NotNull LocalDate date, @NotNull Restaurant restaurant, @NotNull Dish dish) {
         super(id);
         this.date = date;
         this.restaurant = restaurant;

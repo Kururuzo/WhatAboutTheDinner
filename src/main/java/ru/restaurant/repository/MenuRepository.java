@@ -7,31 +7,30 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import ru.restaurant.model.Menu;
+import ru.restaurant.model.MenuItem;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 @Transactional(readOnly = true)
-public interface MenuRepository extends JpaRepository<Menu, Integer> {
+public interface MenuRepository extends JpaRepository<MenuItem, Integer> {
     @Transactional
     @Modifying
-    @Query("DELETE FROM Menu m WHERE m.id=:id")
+    @Query("DELETE FROM MenuItem m WHERE m.id=:id")
     int delete(@Param("id") int id);
 
-    Menu getById(int id);
+    MenuItem getById(int id);
 
     @Transactional
     @Override
-    <S extends Menu> S save(S entity);
+    <S extends MenuItem> S save(S entity);
 
-    List<Menu> findAllByDate(LocalDate date);
+    List<MenuItem> findAllByDateOrderByIdDesc(LocalDate date);
 
-    @Query("SELECT m FROM Menu m LEFT JOIN FETCH m.restaurant LEFT JOIN FETCH m.dish WHERE m.date=:date")
-    List<Menu> findByDateWithRestaurants(@Param("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date);
+    @Query("SELECT m FROM MenuItem m LEFT JOIN FETCH m.restaurant LEFT JOIN FETCH m.dish WHERE m.date=:date")
+    List<MenuItem> findByDateWithRestaurants(@Param("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date);
 
-    Optional<Menu> findByDateAndRestaurantId(@Param("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-                                             @Param("restaurantId") int restaurantId);
+    MenuItem findByDateAndRestaurantId(@Param("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+                                       @Param("restaurantId") int restaurantId);
 }

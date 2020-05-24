@@ -9,7 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import ru.restaurant.model.Menu;
+import ru.restaurant.model.MenuItem;
 import ru.restaurant.service.MenuService;
 import ru.restaurant.to.MenuTo;
 
@@ -18,7 +18,6 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static ru.restaurant.util.ValidationUtil.assureIdConsistent;
 import static ru.restaurant.util.ValidationUtil.checkNew;
 
@@ -37,19 +36,19 @@ public class MenuRestController {
     }
 
     @GetMapping(path = "/{id}")
-    public Menu get(@PathVariable int id) {
+    public MenuItem get(@PathVariable int id) {
         log.info("get menu with id={}", id);
         return service.get(id);
     }
 
     @GetMapping
-    public List<Menu> getAll() {
+    public List<MenuItem> getAll() {
         log.info("get all menus");
         return service.getAll();
     }
 
     @GetMapping(params = "date")
-    public List<Menu> getByDate(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+    public List<MenuItem> getByDate(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         log.info("get menus by date {}", date);
         return service.getAllByDate(date);
     }
@@ -62,10 +61,10 @@ public class MenuRestController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Menu> createWithLocation(@Valid @RequestBody Menu menu) {
-        log.info("create {}", menu);
-        checkNew(menu);
-        Menu created = service.create(menu);
+    public ResponseEntity<MenuItem> createWithLocation(@Valid @RequestBody MenuItem menuItem) {
+        log.info("create {}", menuItem);
+        checkNew(menuItem);
+        MenuItem created = service.create(menuItem);
         URI newResourceUri = ServletUriComponentsBuilder
                 .fromCurrentContextPath()
                 .path(REST_URL + "/{id}")
@@ -76,10 +75,10 @@ public class MenuRestController {
 
     @PutMapping(value = "/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@Valid @RequestBody Menu menu, @PathVariable Integer id) {
-        log.info("update {} with id={}", menu, id);
-        assureIdConsistent(menu, id);
-        service.update(menu);
+    public void update(@Valid @RequestBody MenuItem menuItem, @PathVariable Integer id) {
+        log.info("update {} with id={}", menuItem, id);
+        assureIdConsistent(menuItem, id);
+        service.update(menuItem);
     }
 
     @DeleteMapping(path = "/{id}")

@@ -1,6 +1,5 @@
 package ru.restaurant.to;
 
-import ru.restaurant.model.AbstractBaseEntity;
 import ru.restaurant.model.Dish;
 
 import javax.validation.constraints.NotNull;

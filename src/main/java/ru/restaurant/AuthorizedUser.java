@@ -1,22 +1,50 @@
 package ru.restaurant;
 
 import ru.restaurant.model.User;
+import ru.restaurant.to.UserTo;
+import ru.restaurant.util.UserUtil;
 
 public class AuthorizedUser extends org.springframework.security.core.userdetails.User {
-    private User user;
+
+    private static final long serialVersionUID = 1L;
+
+    private UserTo userTo;
 
     public AuthorizedUser(User user) {
-        super(user.getEmail(), user.getPassword(), user.isEnabled(),
-                true, true, true, user.getRoles());
-        this.user = user;
-    }
-
-    public User getUser() {
-        return user;
+        super(user.getEmail(), user.getPassword(), user.isEnabled(), true, true, true, user.getRoles());
+        this.userTo = UserUtil.asTo(user);
     }
 
     public int getId() {
-        return user.getId();
+        return userTo.id();
     }
+
+    public void update(UserTo newTo) {
+        userTo = newTo;
+    }
+
+    public UserTo getUserTo() {
+        return userTo;
+    }
+
+    @Override
+    public String toString() {
+        return userTo.toString();
+    }
+//    private User user;
+//
+//    public AuthorizedUser(User user) {
+//        super(user.getEmail(), user.getPassword(), user.isEnabled(),
+//                true, true, true, user.getRoles());
+//        this.user = user;
+//    }
+//
+//    public User getUser() {
+//        return user;
+//    }
+//
+//    public int getId() {
+//        return user.getId();
+//    }
 }
 

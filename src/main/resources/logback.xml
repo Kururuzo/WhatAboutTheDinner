@@ -5,7 +5,7 @@
     <jmxConfigurator/>
 
     <appender name="file" class="ch.qos.logback.core.FileAppender">
-        <file>${LOG_DIR}/WhatAboutTheDinner/WhatAboutTheDinner.log</file>
+        <file>${LOG_DIR}/restaurantVotingSystem/restaurantVotingSystem.log</file>
 
         <encoder>
             <charset>UTF-8</charset>

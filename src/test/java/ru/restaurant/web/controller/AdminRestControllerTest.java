@@ -15,6 +15,8 @@ import ru.restaurant.web.AbstractControllerTest;
 import ru.restaurant.web.TestUtil;
 import ru.restaurant.web.json.JsonUtil;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -73,10 +75,10 @@ class AdminRestControllerTest extends AbstractControllerTest {
     void getAll() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL)
                 .with(userHttpBasic(ADMIN)))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(USER_MATCHER.contentJson(ADMIN, USER));
+                .andExpect(USER_MATCHER.contentJson(ADMIN, USER))
+                .andDo(print());
     }
 
     @Test

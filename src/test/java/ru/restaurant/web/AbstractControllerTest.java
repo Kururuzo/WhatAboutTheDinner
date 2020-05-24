@@ -58,7 +58,9 @@ abstract public class AbstractControllerTest {
     @BeforeEach
     void setUp() {
         Objects.requireNonNull(cacheManager.getCache("users")).clear();
-        cacheUtil.clear2ndLevelCache();
+        Objects.requireNonNull(cacheManager.getCache("restaurants")).clear();
+        Objects.requireNonNull(cacheManager.getCache("offer")).clear();
+        Objects.requireNonNull(cacheManager.getCache("menuItem")).clear();
     }
 
     public ResultActions perform(MockHttpServletRequestBuilder builder) throws Exception {

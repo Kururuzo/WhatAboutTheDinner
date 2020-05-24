@@ -6,7 +6,7 @@ import org.springframework.dao.DataAccessException;
 import ru.restaurant.DishTestData;
 import ru.restaurant.MenuTestData;
 import ru.restaurant.RestaurantTestData;
-import ru.restaurant.model.Menu;
+import ru.restaurant.model.MenuItem;
 import ru.restaurant.util.exception.NotFoundException;
 
 import java.time.LocalDate;
@@ -16,15 +16,15 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static ru.restaurant.MenuTestData.*;
 
-class MenuServiceTest extends AbstractServiceTest{
+class MenuItemServiceTest extends AbstractServiceTest{
 
     @Autowired
     MenuService service;
 
     @Test
     void get() throws Exception {
-        Menu menu = service.get(MENU_1_ID);
-        MENU_MATCHER.assertMatch(menu, MENU_1);
+        MenuItem menuItem = service.get(MENU_1_ID);
+        MENU_MATCHER.assertMatch(menuItem, MENU_1);
     }
 
     @Test
@@ -34,7 +34,7 @@ class MenuServiceTest extends AbstractServiceTest{
 
     @Test
     void getAll() throws Exception {
-        List<Menu> all = service.getAll();
+        List<MenuItem> all = service.getAll();
         MENU_MATCHER.assertMatch(all, MENUS);
     }
 
@@ -45,18 +45,18 @@ class MenuServiceTest extends AbstractServiceTest{
 
     @Test
     void create() throws Exception {
-        Menu newMenu = getNew();
-        Menu created = service.create(new Menu(newMenu));
+        MenuItem newMenuItem = getNew();
+        MenuItem created = service.create(new MenuItem(newMenuItem));
         int newId = created.getId();
-        newMenu.setId(newId);
-        MENU_MATCHER.assertMatch(created, newMenu);
-        MENU_MATCHER.assertMatch(service.get(newId), newMenu);
+        newMenuItem.setId(newId);
+        MENU_MATCHER.assertMatch(created, newMenuItem);
+        MENU_MATCHER.assertMatch(service.get(newId), newMenuItem);
     }
 
     @Test
     void duplicateMenuCreate() throws Exception {
         assertThrows(DataAccessException.class, () ->
-                service.create(new Menu(null,
+                service.create(new MenuItem(null,
                         LocalDate.of(2020, Month.APRIL,1),
                         RestaurantTestData.REST_1,
                         DishTestData.DISH_1)));
@@ -64,8 +64,8 @@ class MenuServiceTest extends AbstractServiceTest{
 
     @Test
     void update() throws Exception {
-        Menu updated = MenuTestData.getUpdated();
-        service.update(new Menu(updated));
+        MenuItem updated = MenuTestData.getUpdated();
+        service.update(new MenuItem(updated));
         MENU_MATCHER.assertMatch(service.get(MENU_1_ID), updated);
     }
 

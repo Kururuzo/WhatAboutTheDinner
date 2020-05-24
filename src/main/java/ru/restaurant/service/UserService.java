@@ -46,7 +46,7 @@ public class UserService implements UserDetailsService {
     }
 
     public List<User> getAll() {
-        return repository.findAll(Sort.by(Sort.DEFAULT_DIRECTION, "name"));
+        return repository.findAll(Sort.by(Sort.Direction.ASC, "name", "email"));
     }
 
     @CacheEvict(value = "users", key = "#user")

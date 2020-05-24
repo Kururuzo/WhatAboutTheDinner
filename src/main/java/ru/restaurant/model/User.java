@@ -141,5 +141,4 @@ public class User extends AbstractNamedEntity{
                 ", votes=" + votes +
                 '}';
     }
-
 }

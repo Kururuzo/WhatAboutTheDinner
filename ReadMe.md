@@ -8,7 +8,7 @@ Design and implement a REST API using Hibernate/Spring/SpringMVC (or Spring-Boot
 Build a voting system for deciding where to have lunch.
 
 - 2 types of users: admin and regular users
-- Admin can input a restaurant and it's lunch menu of the day (2-5 items usually, just a dish name and price)
+- Admin can input a restaurant and it's lunch menuItem of the day (2-5 items usually, just a dish name and price)
 - Menu changes each day (admins do the updates)
 - Users can vote on which restaurant they want to have lunch at
 - Only one vote counted per user
@@ -16,7 +16,7 @@ Build a voting system for deciding where to have lunch.
     + If it is before 11:00 we asume that he changed his mind.
     + If it is after 11:00 then it is too late, vote can't be changed
     
-Each restaurant provides new menu each day.
+Each restaurant provides new menuItem each day.
 
 ## Run
 ```
@@ -85,13 +85,13 @@ After this commands you will start hosting website on page {Base URL} `localhost
 
 | Method | Description          | URL                                                 | Access         |
 |--------|----------------------|-----------------------------------------------------|----------------|
-| GET    | Offer by date        | {Base URL}/menus/offer?date={date}                  | Anyone         |
-| GET    | Get                  | {Base URL}/menus/{menuId}                           | Authorized     |
-| GET    | Get All              | {Base URL}/menus                                    | Authorized     |
-| GET    | Get by date          | {Base URL}/menus?date={date}                        | Authorized     |
-| POST   | Create               | {Base URL}/menus                                    | Admin Only     |
-| PUT    | Update               | {Base URL}/menus/{menuId}                           | Admin Only     |
-| DELETE | Delete               | {Base URL}/menus/{menuId}                           | Admin Only     |
+| GET    | Offer by date        | {Base URL}/menuItems/offer?date={date}                  | Anyone         |
+| GET    | Get                  | {Base URL}/menuItems/{menuId}                           | Authorized     |
+| GET    | Get All              | {Base URL}/menuItems                                    | Authorized     |
+| GET    | Get by date          | {Base URL}/menuItems?date={date}                        | Authorized     |
+| POST   | Create               | {Base URL}/menuItems                                    | Admin Only     |
+| PUT    | Update               | {Base URL}/menuItems/{menuId}                           | Admin Only     |
+| DELETE | Delete               | {Base URL}/menuItems/{menuId}                           | Admin Only     |
 
 
 ### Admin Votes

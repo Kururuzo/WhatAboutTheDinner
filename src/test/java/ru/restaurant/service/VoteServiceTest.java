@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ru.restaurant.DishTestData;
 import ru.restaurant.RestaurantTestData;
 import ru.restaurant.UserTestData;
-import ru.restaurant.model.Menu;
+import ru.restaurant.model.MenuItem;
 import ru.restaurant.model.Vote;
 import ru.restaurant.repository.MenuRepository;
 import ru.restaurant.repository.VoteRepository;
@@ -49,7 +49,7 @@ class VoteServiceTest extends AbstractServiceTest{
     @Test
     void create() throws Exception {
         LocalDate nowDate = LocalDate.now();
-        Menu menu = menuRepository.save(new Menu(nowDate, RestaurantTestData.REST_1, DishTestData.DISH_1));
+        MenuItem menuItem = menuRepository.save(new MenuItem(nowDate, RestaurantTestData.REST_1, DishTestData.DISH_1));
 
         Vote newVote = new Vote();
         Vote created = service.doVote(

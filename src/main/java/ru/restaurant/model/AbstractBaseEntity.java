@@ -43,7 +43,7 @@ public abstract class AbstractBaseEntity implements HasId {
         if (o == null || !getClass().equals(Hibernate.getClass(o))) {
             return false;
         }
-        ru.restaurant.model.AbstractBaseEntity that = (ru.restaurant.model.AbstractBaseEntity) o;
+        AbstractBaseEntity that = (AbstractBaseEntity) o;
         return id != null && id.equals(that.id);
     }
 

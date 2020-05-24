@@ -5,6 +5,7 @@ import ru.restaurant.to.VoteTo;
 import ru.restaurant.util.exception.DateTimeExpiredException;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collection;
 import java.util.List;
@@ -16,16 +17,16 @@ public class VoteUtil {
     private VoteUtil() {
     }
 
-    public static void checkIsTimeExpired(LocalDate date, int restaurantId) {
-        boolean expired = LocalTime.now().isAfter(CHECK_TIME);
+    public static void checkIsDateAndTimeExpired(LocalDate date, LocalDateTime now,  int restaurantId) {
+        boolean expired = now.toLocalTime().isAfter(CHECK_TIME);
+        checkIsDateExpired(date, now, restaurantId);
         if (expired) {
             throw new DateTimeExpiredException("Voting time for restaurantId=" + restaurantId + " is expired");
         }
     }
 
-    public static void checkIsDateExpired(LocalDate date, int restaurantId) {
-        LocalDate today = LocalDate.now();
-        if (!date.equals(today)) {
+    public static void checkIsDateExpired(LocalDate date, LocalDateTime now, int restaurantId) {
+        if (!date.equals(now.toLocalDate())) {
             throw new DateTimeExpiredException("Voting date for restaurantId=" + restaurantId + " is in the past");
         }
     }

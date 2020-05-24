@@ -8,7 +8,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.restaurant.DishTestData;
 import ru.restaurant.MenuTestData;
 import ru.restaurant.RestaurantTestData;
-import ru.restaurant.model.Menu;
+import ru.restaurant.model.MenuItem;
 import ru.restaurant.service.MenuService;
 import ru.restaurant.util.exception.NotFoundException;
 import ru.restaurant.web.AbstractControllerTest;
@@ -27,7 +27,7 @@ import static ru.restaurant.util.exception.ErrorType.VALIDATION_ERROR;
 import static ru.restaurant.web.TestUtil.readFromJson;
 import static ru.restaurant.web.TestUtil.userHttpBasic;
 
-class MenuRestControllerTest extends AbstractControllerTest {
+class MenuItemRestControllerTest extends AbstractControllerTest {
 
     private static final String REST_URL = MenuRestController.REST_URL + '/';
 
@@ -91,24 +91,24 @@ class MenuRestControllerTest extends AbstractControllerTest {
 
     @Test
     void createWithLocation() throws Exception {
-        Menu menu = new Menu(null, LocalDate.of(3000, 1, 1), RestaurantTestData.REST_1, DishTestData.DISH_1);
+        MenuItem menuItem = new MenuItem(null, LocalDate.of(3000, 1, 1), RestaurantTestData.REST_1, DishTestData.DISH_1);
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeValue(menu)))
+                .content(JsonUtil.writeValue(menuItem)))
                 .andDo(print())
                 .andExpect(status().isCreated());
 
-        Menu returned = readFromJson(action, Menu.class);
-        menu.setId(returned.getId());
+        MenuItem returned = readFromJson(action, MenuItem.class);
+        menuItem.setId(returned.getId());
 
-        MENU_MATCHER.assertMatch(service.getAll(), menu, MENU_12, MENU_11, MENU_10, MENU_9, MENU_8, MENU_7, MENU_6,
+        MENU_MATCHER.assertMatch(service.getAll(), menuItem, MENU_12, MENU_11, MENU_10, MENU_9, MENU_8, MENU_7, MENU_6,
                 MENU_5, MENU_4, MENU_3, MENU_2, MENU_1);
     }
 
     @Test
     void createInvalid() throws Exception {
-        Menu invalid = new Menu(null, null, null);
+        MenuItem invalid = new MenuItem(null, null, null);
         perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(invalid))
@@ -121,7 +121,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
 
     @Test
     void update() throws Exception {
-        Menu updated = MenuTestData.getUpdated();
+        MenuItem updated = MenuTestData.getUpdated();
         perform(MockMvcRequestBuilders.put(REST_URL + MENU_1_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated))
@@ -134,7 +134,7 @@ class MenuRestControllerTest extends AbstractControllerTest {
 
     @Test
     void updateInvalid() throws Exception {
-        Menu invalid = new Menu(MENU_1_ID, null, null, null);
+        MenuItem invalid = new MenuItem(MENU_1_ID, null, null, null);
         perform(MockMvcRequestBuilders.put(REST_URL + MENU_1_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(invalid))

@@ -73,25 +73,25 @@
 ######## ======= Menus =======
 
 #### get get offer by day(for Anyone)
-`curl 'http://localhost:8080/rest/menus/offer?date=2020-04-01'`
+`curl 'http://localhost:8080/rest/menuItems/offer?date=2020-04-01'`
 
-#### get menu (for Authenticated)
-`curl 'http://localhost:8080/rest/menus/100016' --user 'user@yandex.ru:password'`
+#### get menuItem (for Authenticated)
+`curl 'http://localhost:8080/rest/menuItems/100016' --user 'user@yandex.ru:password'`
 
-#### get all menus (for Authenticated)
-`curl 'http://localhost:8080/rest/menus' --user 'user@yandex.ru:password'`
+#### get all menuItems (for Authenticated)
+`curl 'http://localhost:8080/rest/menuItems' --user 'user@yandex.ru:password'`
 
-#### get all menus by day (for Authenticated)
-`curl 'http://localhost:8080/rest/menus?date=2020-04-01' --user 'user@yandex.ru:password'`
+#### get all menuItems by day (for Authenticated)
+`curl 'http://localhost:8080/rest/menuItems?date=2020-04-01' --user 'user@yandex.ru:password'`
 
-#### create menu (for Admin only)
-`curl -s -i -X POST -d '{"date":"2020-05-14","restaurant":{"id":100013,"name":"Lucky Pizza"},"dish":{"id":100002,"name":"Meat Soup","price":50}}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/rest/menus --user admin@gmail.com:admin`
+#### create menuItem (for Admin only)
+`curl -s -i -X POST -d '{"date":"2020-05-14","restaurant":{"id":100013,"name":"Lucky Pizza"},"dish":{"id":100002,"name":"Meat Soup","price":50}}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/rest/menuItems --user admin@gmail.com:admin`
 
-#### update menu (for Admin only)
-`curl -X PUT -H 'Content-Type:application/json;charset=UTF-8' -d '{"date":"2020-05-24","restaurant":{"id":100014,"name":"Lucky Pizza"},"dish":{"id":100002,"name":"Meat Soup","price":50}}' http://localhost:8080/rest/menus/100030 --user admin@gmail.com:admin`
+#### update menuItem (for Admin only)
+`curl -X PUT -H 'Content-Type:application/json;charset=UTF-8' -d '{"date":"2020-05-24","restaurant":{"id":100014,"name":"Lucky Pizza"},"dish":{"id":100002,"name":"Meat Soup","price":50}}' http://localhost:8080/rest/menuItems/100030 --user admin@gmail.com:admin`
 
-#### delete menu (for Admin only)
-`curl -X DELETE -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/rest/menus/100030  --user admin@gmail.com:admin`
+#### delete menuItem (for Admin only)
+`curl -X DELETE -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/rest/menuItems/100030  --user admin@gmail.com:admin`
 
 ######## ======= Votes =======
 
@@ -104,13 +104,13 @@
 #### get all votes (for Authenticated)
 `curl 'http://localhost:8080/rest/votes' --user user@yandex.ru:password`
 
-#### do vote (for Authenticated, menu for this day must exitsts)
+#### do vote (for Authenticated, menuItem for this day must exitsts)
 `curl -s -i -X POST -d '100013' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/rest/votes --user user@yandex.ru:password`
 
 #### update vote (for Authenticated, vote for this day must exitsts)
 `curl -X PUT http://localhost:8080/rest/votes/100025 --user user@yandex.ru:password`
 
-#### delete menu (for Authenticated)
+#### delete menuItem (for Authenticated)
 `curl -X DELETE -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/rest/votes/100013  --user user@yandex.ru:password`
 
 #### get vote results by date (for Authenticated)
@@ -128,5 +128,5 @@
 #### update vote (for Admin only)
 `curl -X PUT -H 'Content-Type:application/json;charset=UTF-8' -d '{"date":"2020-05-04","restaurant":{"id":100014,"name":"Steak House"},"user":{"id":100001,"name":"Admin","email":"admin@gmail.com","enabled":true,"registered":"2020-05-14T07:01:05.392+00:00","roles":["USER","ADMIN"]}}' http://localhost:8080/rest/admin/votes/100033 --user admin@gmail.com:admin`
 
-#### delete menu (for Admin only)
+#### delete menuItem (for Admin only)
 `curl -X DELETE -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/rest/admin/votes/100030  --user admin@gmail.com:admin`
