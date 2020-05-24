@@ -72,7 +72,7 @@ public class VoteService {
         LocalDateTime now = LocalDateTime.now();
         VoteUtil.checkIsDateExpired(date, now, restaurantId);
 
-        MenuItem menuItem = menuService.findByDateAndRestaurantId(date, restaurantId);
+//        MenuItem menuItem = menuService.findByDateAndRestaurantId(date, restaurantId);
         Restaurant restaurant = restaurantService.get(restaurantId);
         User user = userService.get(userId);
 

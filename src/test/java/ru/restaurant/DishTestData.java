@@ -23,7 +23,7 @@ public class DishTestData {
     public static final Dish DISH_7 = new Dish(START_SEQ + 11, "Fried Chicken", 110, REST_2);
     public static final Dish DISH_8 = new Dish(START_SEQ + 12, "Tee", 10, REST_2); // id:1000
 
-    public static final Dish DISH_9 = new Dish(START_SEQ + 13, "Chicken Soup", 45, REST_3);
+    public static final Dish DISH_9 = new Dish(START_SEQ + 13, "Gazpacho", 30, REST_3);
     public static final Dish DISH_10 = new Dish(START_SEQ + 14, "Vegetable salad", 40, REST_3);
     public static final Dish DISH_11 = new Dish(START_SEQ + 15, "IceCream", 30, REST_3);
     public static final Dish DISH_12 = new Dish(START_SEQ + 16, "Juice", 20, REST_3);
@@ -34,6 +34,7 @@ public class DishTestData {
     public static Dish getNew() {
         return new Dish(null, "New", 50, REST_1);
     }
+
 
     public static Dish getUpdated() {
         Dish dish = new Dish(DISH_1);

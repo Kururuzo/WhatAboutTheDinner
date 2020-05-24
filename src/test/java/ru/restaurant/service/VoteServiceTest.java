@@ -49,7 +49,7 @@ class VoteServiceTest extends AbstractServiceTest{
     @Test
     void create() throws Exception {
         LocalDate nowDate = LocalDate.now();
-        MenuItem menuItem = menuRepository.save(new MenuItem(nowDate, RestaurantTestData.REST_1, DishTestData.DISH_1));
+        MenuItem menuItem = menuRepository.save(new MenuItem(nowDate, DishTestData.DISH_1));
 
         Vote newVote = new Vote();
         Vote created = service.doVote(

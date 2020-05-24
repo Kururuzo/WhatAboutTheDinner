@@ -14,8 +14,8 @@ import java.util.Set;
 public class Restaurant extends AbstractNamedEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
-    @OrderBy("date DESC")
-    private Set<MenuItem> menuItems;
+//    @OrderBy("date DESC")
+    private Set<Dish> dishes;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     @OrderBy("date DESC")
@@ -32,12 +32,12 @@ public class Restaurant extends AbstractNamedEntity {
         super(id, name);
     }
 
-    public Set<MenuItem> getMenuItems() {
-        return menuItems;
+    public Set<Dish> getDishes() {
+        return dishes;
     }
 
-    public void setMenuItems(Set<MenuItem> menuItems) {
-        this.menuItems = CollectionUtils.isEmpty(menuItems) ? Collections.emptySet() : menuItems;
+    public void setDishes(Set<Dish> dishes) {
+        this.dishes = CollectionUtils.isEmpty(dishes) ? Collections.emptySet() : dishes;
     }
 
     public Set<Vote> getVotes() {

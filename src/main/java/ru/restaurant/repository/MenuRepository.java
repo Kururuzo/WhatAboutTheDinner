@@ -28,9 +28,11 @@ public interface MenuRepository extends JpaRepository<MenuItem, Integer> {
 
     List<MenuItem> findAllByDateOrderByIdDesc(LocalDate date);
 
-    @Query("SELECT m FROM MenuItem m LEFT JOIN FETCH m.restaurant LEFT JOIN FETCH m.dish WHERE m.date=:date")
+//    @Query("SELECT m FROM MenuItem m LEFT JOIN FETCH m.restaurant LEFT JOIN FETCH m.dish WHERE m.date=:date")
+    @Query("SELECT m FROM MenuItem m LEFT JOIN FETCH m.dish WHERE m.date=:date")
     List<MenuItem> findByDateWithRestaurants(@Param("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date);
 
-    MenuItem findByDateAndRestaurantId(@Param("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-                                       @Param("restaurantId") int restaurantId);
+//    MenuItem findByDateAndRestaurantId(@Param("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+//                                       @Param("restaurantId") int restaurantId);
+    MenuItem findByDate(@Param("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date);
 }

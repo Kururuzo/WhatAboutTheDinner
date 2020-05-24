@@ -18,5 +18,4 @@
         </property>
     </bean>
 
-    <bean class="ru.restaurant.util.CacheUtil"/>
 </beans>

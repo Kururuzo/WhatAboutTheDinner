@@ -33,9 +33,9 @@ public class MenuService {
         return checkNotFoundWithId(repository.getById(id), id);
     }
 
-    public MenuItem findByDateAndRestaurantId(LocalDate date, int restaurantId) {
-        return checkNotFoundWithId(repository.findByDateAndRestaurantId(date,restaurantId), restaurantId);
-    }
+//    public MenuItem findByDateAndRestaurantId(LocalDate date, int restaurantId) {
+//        return checkNotFoundWithId(repository.findByDate(date,restaurantId), restaurantId);
+//    }
 
     public List<MenuItem> getAll() {
         return repository.findAll(Sort.by(Sort.Direction.DESC, "id"));
@@ -55,7 +55,7 @@ public class MenuService {
 //        ValidationUtil.checkIsEmpty(allMenuByDate, "Menus for this date not found.");
 
         Map<Restaurant, List<MenuItem>> restsAndMenusMap = allMenuItemByDate.stream()
-                .collect(Collectors.groupingBy(MenuItem::getRestaurant));
+                .collect(Collectors.groupingBy(menuItem -> menuItem.getDish().getRestaurant()));
 
         return restsAndMenusMap.entrySet().stream().map(en -> new MenuTo(
                 date,

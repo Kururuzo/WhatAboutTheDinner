@@ -80,7 +80,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
     @Test
     void doVote() throws Exception {
         LocalDate nowDate = LocalDate.now();
-        menuService.create(new MenuItem(nowDate, RestaurantTestData.REST_1, DishTestData.DISH_1));
+        menuService.create(new MenuItem(nowDate, DishTestData.DISH_1));
 
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .with(userHttpBasic(USER))
@@ -93,7 +93,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
     @Test
     void doDuplicateVote() throws Exception {
         LocalDate nowDate = LocalDate.now();
-        MenuItem menuItem1 = menuService.create(new MenuItem(nowDate, RestaurantTestData.REST_1, DishTestData.DISH_1));
+        MenuItem menuItem1 = menuService.create(new MenuItem(nowDate, DishTestData.DISH_1));
         Vote newVote = voteRepository.save(new Vote(nowDate, RestaurantTestData.REST_1, USER));
 
         perform(MockMvcRequestBuilders.post(REST_URL)
@@ -108,10 +108,10 @@ class VoteRestControllerTest extends AbstractControllerTest {
     void updateVoteForUser() throws Exception {
         if(LocalTime.now().isBefore(LocalTime.of(11, 0))) {
             LocalDate nowDate = LocalDate.now();
-            MenuItem menu1 = menuService.create(new MenuItem(nowDate, RestaurantTestData.REST_1, DishTestData.DISH_1));
+            MenuItem menu1 = menuService.create(new MenuItem(nowDate, DishTestData.DISH_1));
             Vote newVote = voteRepository.save(new Vote(nowDate, RestaurantTestData.REST_1, USER));
 
-            MenuItem menu2 = menuService.create(new MenuItem(nowDate, RestaurantTestData.REST_2, DishTestData.DISH_2));
+            MenuItem menu2 = menuService.create(new MenuItem(nowDate, DishTestData.DISH_2));
 
             perform(MockMvcRequestBuilders.put(REST_URL + RestaurantTestData.REST_2.getId())
                     .with(userHttpBasic(USER))

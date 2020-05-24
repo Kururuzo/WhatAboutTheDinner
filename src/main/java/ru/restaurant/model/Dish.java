@@ -52,4 +52,11 @@ public class Dish extends AbstractNamedEntity{
         this.price = price;
     }
 
+    public Restaurant getRestaurant() {
+        return restaurant;
+    }
+
+    public void setRestaurant(Restaurant restaurant) {
+        this.restaurant = restaurant;
+    }
 }

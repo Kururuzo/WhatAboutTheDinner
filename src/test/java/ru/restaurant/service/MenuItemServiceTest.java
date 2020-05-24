@@ -6,6 +6,7 @@ import org.springframework.dao.DataAccessException;
 import ru.restaurant.DishTestData;
 import ru.restaurant.MenuTestData;
 import ru.restaurant.RestaurantTestData;
+import ru.restaurant.model.Dish;
 import ru.restaurant.model.MenuItem;
 import ru.restaurant.util.exception.NotFoundException;
 
@@ -15,11 +16,15 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static ru.restaurant.MenuTestData.*;
+import static ru.restaurant.RestaurantTestData.REST_1;
 
 class MenuItemServiceTest extends AbstractServiceTest{
 
     @Autowired
     MenuService service;
+
+    @Autowired
+    DishService dishService;
 
     @Test
     void get() throws Exception {
@@ -45,7 +50,9 @@ class MenuItemServiceTest extends AbstractServiceTest{
 
     @Test
     void create() throws Exception {
-        MenuItem newMenuItem = getNew();
+        Dish dish = dishService.create(new Dish(null, "New", 50, REST_1));
+        MenuItem newMenuItem = new MenuItem(null, LocalDate.of(2020, Month.APRIL,1), dish);
+
         MenuItem created = service.create(new MenuItem(newMenuItem));
         int newId = created.getId();
         newMenuItem.setId(newId);
@@ -58,7 +65,6 @@ class MenuItemServiceTest extends AbstractServiceTest{
         assertThrows(DataAccessException.class, () ->
                 service.create(new MenuItem(null,
                         LocalDate.of(2020, Month.APRIL,1),
-                        RestaurantTestData.REST_1,
                         DishTestData.DISH_1)));
     }
 

@@ -91,7 +91,7 @@ class MenuItemRestControllerTest extends AbstractControllerTest {
 
     @Test
     void createWithLocation() throws Exception {
-        MenuItem menuItem = new MenuItem(null, LocalDate.of(3000, 1, 1), RestaurantTestData.REST_1, DishTestData.DISH_1);
+        MenuItem menuItem = new MenuItem(null, LocalDate.of(3000, 1, 1), DishTestData.DISH_1);
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .with(userHttpBasic(ADMIN))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -134,7 +134,7 @@ class MenuItemRestControllerTest extends AbstractControllerTest {
 
     @Test
     void updateInvalid() throws Exception {
-        MenuItem invalid = new MenuItem(MENU_1_ID, null, null, null);
+        MenuItem invalid = new MenuItem(MENU_1_ID, null, null);
         perform(MockMvcRequestBuilders.put(REST_URL + MENU_1_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(invalid))
