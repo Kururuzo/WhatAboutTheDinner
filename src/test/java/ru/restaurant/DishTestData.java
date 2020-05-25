@@ -2,6 +2,8 @@ package ru.restaurant;
 
 import ru.restaurant.model.Dish;
 import ru.restaurant.model.User;
+import ru.restaurant.to.DishTo;
+import ru.restaurant.util.DishUtil;
 
 import java.util.List;
 
@@ -10,6 +12,7 @@ import static ru.restaurant.model.AbstractBaseEntity.START_SEQ;
 
 public class DishTestData {
     public static TestMatcher<Dish> DISH_MATCHER = TestMatcher.usingEquals(Dish.class);
+    public static TestMatcher<DishTo> DISH_TO_MATCHER = TestMatcher.usingFieldsComparator(DishTo.class);
 
     public static final int DISH_1_ID = START_SEQ + 5;
 
@@ -31,10 +34,13 @@ public class DishTestData {
     public static final List<Dish> DISHES = List.of(DISH_12, DISH_11, DISH_10, DISH_9, DISH_8, DISH_7,
             DISH_6, DISH_5, DISH_4, DISH_3, DISH_2, DISH_1);
 
+    public static final DishTo DISH_TO_1 = new DishTo(DISH_1);
+
+    public static final List<DishTo> DISHES_TO = DishUtil.tosFromDishes(DISHES);
+
     public static Dish getNew() {
         return new Dish(null, "New", 50, REST_1);
     }
-
 
     public static Dish getUpdated() {
         Dish dish = new Dish(DISH_1);

@@ -8,9 +8,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name = "dishes",  uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "restaurant_id"},
+@Table(name = "dishes", uniqueConstraints = {@UniqueConstraint(columnNames = {"name", "restaurant_id"},
         name = "dishes_unique_name_restaurant_idx")})
-public class Dish extends AbstractNamedEntity{
+public class Dish extends AbstractNamedEntity {
 
     @Column(name = "price", nullable = false)
     @Range(min = 0, max = 10_000)
@@ -24,18 +24,14 @@ public class Dish extends AbstractNamedEntity{
     private Restaurant restaurant;
 
     public Dish(Dish d) {
-        this (d.id, d.name, d.price, d.restaurant);
+        this(d.id, d.name, d.price, d.restaurant);
     }
 
-    public Dish() {}
-    public Dish(Integer id, String name, Integer price ) {
-        super(id, name);
-        this.price = price;
+    public Dish() {
     }
 
-    public Dish(@Range(min = 0, max = 10_000) @NotNull Integer price, @NotNull Restaurant restaurant) {
-        this.price = price;
-        this.restaurant = restaurant;
+    public Dish(String name, @Range(min = 0, max = 10_000) @NotNull Integer price, @NotNull Restaurant restaurant) {
+        this(null, name, price, restaurant);
     }
 
     public Dish(Integer id, String name, @Range(min = 0, max = 10_000) @NotNull Integer price, @NotNull Restaurant restaurant) {

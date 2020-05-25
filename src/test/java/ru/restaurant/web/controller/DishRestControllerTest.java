@@ -6,8 +6,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.restaurant.DishTestData;
+import ru.restaurant.RestaurantTestData;
 import ru.restaurant.model.Dish;
 import ru.restaurant.service.DishService;
+import ru.restaurant.to.DishTo;
 import ru.restaurant.util.exception.NotFoundException;
 import ru.restaurant.web.AbstractControllerTest;
 import ru.restaurant.web.json.JsonUtil;
@@ -33,10 +35,10 @@ class DishRestControllerTest extends AbstractControllerTest {
     void get() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + DISH_1_ID)
                 .with(userHttpBasic(ADMIN)))
-                .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(DISH_MATCHER.contentJson(DISH_1));
+                .andExpect(DISH_TO_MATCHER.contentJson(DISH_TO_1))
+                .andDo(print());
     }
 
     @Test
@@ -59,28 +61,30 @@ class DishRestControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(ADMIN)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(DISH_MATCHER.contentJson(DISHES));
+                .andExpect(DISH_TO_MATCHER.contentJson(DISHES_TO))
+                .andDo(print());
     }
 
     @Test
     void createWithLocation() throws Exception {
-        Dish newDish = DishTestData.getNew();
+        DishTo newDishTo = new DishTo(DishTestData.getNew());
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeValue(newDish))
+                .content(JsonUtil.writeValue(newDishTo))
                 .with(userHttpBasic(ADMIN)))
                 .andDo(print());
 
-        Dish created = readFromJson(action, Dish.class);
+        DishTo created = readFromJson(action, DishTo.class);
         int newId = created.id();
-        newDish.setId(newId);
-        DISH_MATCHER.assertMatch(created, newDish);
-        DISH_MATCHER.assertMatch(service.get(newId), newDish);
+        newDishTo.setId(newId);
+
+        DISH_TO_MATCHER.assertMatch(created, newDishTo);
+        DISH_TO_MATCHER.assertMatch(new DishTo(service.get(newId)), newDishTo);
     }
 
     @Test
     void createInvalid() throws Exception {
-        Dish invalid = new Dish(null, "", 100);
+        DishTo invalid = new DishTo("", 100, RestaurantTestData.REST_1_ID);
         perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(invalid))
@@ -93,24 +97,25 @@ class DishRestControllerTest extends AbstractControllerTest {
 
     @Test
     void update() throws Exception {
-        Dish updated = DishTestData.getUpdated();
+        DishTo updated = new DishTo(DishTestData.getUpdated());
         perform(MockMvcRequestBuilders.put(REST_URL + DISH_1_ID).contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated))
                 .with(userHttpBasic(ADMIN)))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNoContent())
+                .andDo(print());
 
-        DISH_MATCHER.assertMatch(service.get(DISH_1_ID), updated);
+        DishTo to = new DishTo(service.get(DISH_1_ID));
+        DISH_TO_MATCHER.assertMatch(to, updated);
     }
 
     @Test
     void updateInvalid() throws Exception {
-        Dish invalid = new Dish(DISH_1);
+        DishTo invalid = new DishTo(DISH_1);
         invalid.setName("");
         perform(MockMvcRequestBuilders.put(REST_URL + DISH_1_ID)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(invalid))
                 .with(userHttpBasic(ADMIN)))
-                .andDo(print())
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(errorType(VALIDATION_ERROR))
                 .andDo(print());
@@ -131,5 +136,4 @@ class DishRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isUnprocessableEntity())
                 .andDo(print());
     }
-
 }

@@ -12,7 +12,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
-import ru.restaurant.util.CacheUtil;
 import ru.restaurant.util.exception.ErrorType;
 
 import javax.annotation.PostConstruct;
@@ -43,8 +42,8 @@ abstract public class AbstractControllerTest {
 
     @Autowired
     private CacheManager cacheManager;
-    @Autowired(required = false)
-    private CacheUtil cacheUtil;
+//    @Autowired(required = false)
+//    private CacheUtil cacheUtil;
 
     @PostConstruct
     private void postConstruct() {
