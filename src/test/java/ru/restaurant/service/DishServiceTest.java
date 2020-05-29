@@ -3,13 +3,18 @@ package ru.restaurant.service;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.restaurant.DishTestData;
+import ru.restaurant.RestaurantTestData;
 import ru.restaurant.model.Dish;
 import ru.restaurant.util.exception.NotFoundException;
 
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static ru.restaurant.DishTestData.*;
+import static ru.restaurant.MenuTestData.MENUS;
+import static ru.restaurant.MenuTestData.MENU_MATCHER;
 
 class DishServiceTest extends AbstractServiceTest{
 
@@ -31,6 +36,19 @@ class DishServiceTest extends AbstractServiceTest{
     void getAll() throws Exception {
         List<Dish> all = service.getAll();
         DISH_MATCHER.assertMatch(all, DISHES);
+    }
+
+    @Test
+    void getAllByDate() {
+        DISH_MATCHER.assertMatch(service.getAllByDate(LocalDate.of(2020, Month.APRIL,1)), DISHES);
+    }
+
+    @Test
+    void findAllByDateAndRestaurantId() {
+        DISH_MATCHER.assertMatch(
+                service.findAllByDateAndRestaurantId(
+                        LocalDate.of(2020, Month.APRIL,1),
+                        RestaurantTestData.REST_1_ID), DISH_1, DISH_2, DISH_3, DISH_4);
     }
 
     @Test

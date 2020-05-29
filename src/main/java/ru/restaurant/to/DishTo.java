@@ -3,6 +3,7 @@ package ru.restaurant.to;
 import ru.restaurant.model.Dish;
 
 import javax.validation.constraints.*;
+import java.time.LocalDate;
 
 public class DishTo extends BaseTo{
     @NotBlank
@@ -12,25 +13,30 @@ public class DishTo extends BaseTo{
     private Integer price;
 
     @NotNull
+    private LocalDate date;
+
+    @NotNull
     private Integer restaurantId;
 
     public DishTo(Dish dish) {
-        this(dish.getId(), dish.getName(), dish.getPrice(), dish.getRestaurant().getId());
+        this(dish.getId(), dish.getName(), dish.getPrice(), dish.getDate(), dish.getRestaurant().getId());
     }
 
     public DishTo() {}
 
-    public DishTo(@NotBlank String name, @PositiveOrZero Integer price, @NotNull Integer restaurantId) {
+    public DishTo(@NotBlank String name, @PositiveOrZero Integer price, @NotNull LocalDate date, @NotNull Integer restaurantId) {
         super(null);
         this.name = name;
         this.price = price;
+        this.date = date;
         this.restaurantId = restaurantId;
     }
 
-    public DishTo(Integer id, @NotBlank String name, @PositiveOrZero Integer price, @NotNull Integer restaurantId) {
+    public DishTo(Integer id, @NotBlank String name, @PositiveOrZero Integer price, @NotNull LocalDate date, @NotNull Integer restaurantId) {
         super(id);
         this.name = name;
         this.price = price;
+        this.date = date;
         this.restaurantId = restaurantId;
     }
 
@@ -50,6 +56,14 @@ public class DishTo extends BaseTo{
         this.price = price;
     }
 
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
     public Integer getRestaurantId() {
         return restaurantId;
     }
@@ -61,8 +75,10 @@ public class DishTo extends BaseTo{
     @Override
     public String toString() {
         return "DishTo{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", price=" + price +
+                ", date=" + date +
                 ", restaurantId=" + restaurantId +
                 '}';
     }

@@ -10,19 +10,23 @@ import ru.restaurant.RestaurantTestData;
 import ru.restaurant.model.Dish;
 import ru.restaurant.service.DishService;
 import ru.restaurant.to.DishTo;
+import ru.restaurant.to.RestaurantTo;
 import ru.restaurant.util.exception.NotFoundException;
 import ru.restaurant.web.AbstractControllerTest;
 import ru.restaurant.web.json.JsonUtil;
+
+import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.restaurant.DishTestData.*;
+import static ru.restaurant.MenuTestData.MENUS;
+import static ru.restaurant.MenuTestData.MENU_MATCHER;
 import static ru.restaurant.UserTestData.ADMIN;
 import static ru.restaurant.util.exception.ErrorType.VALIDATION_ERROR;
-import static ru.restaurant.web.TestUtil.readFromJson;
-import static ru.restaurant.web.TestUtil.userHttpBasic;
+import static ru.restaurant.web.TestUtil.*;
 
 class DishRestControllerTest extends AbstractControllerTest {
 
@@ -66,6 +70,27 @@ class DishRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void getAllByDate() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "?date=2020-04-01")
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(DISH_TO_MATCHER.contentJson(DISHES_TO));
+    }
+
+    @Test
+    void findAllByDateAndRestaurantId() throws Exception {
+        ResultActions action = perform(MockMvcRequestBuilders.get(REST_URL + "?date=2020-04-01&restaurantId=" + RestaurantTestData.REST_1_ID)
+                .with(userHttpBasic(ADMIN)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(DISH_TO_MATCHER.contentJson(DISHES_TO_FOR_REST_1))
+        ;
+    }
+
+    @Test
     void createWithLocation() throws Exception {
         DishTo newDishTo = new DishTo(DishTestData.getNew());
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
@@ -84,12 +109,11 @@ class DishRestControllerTest extends AbstractControllerTest {
 
     @Test
     void createInvalid() throws Exception {
-        DishTo invalid = new DishTo("", 100, RestaurantTestData.REST_1_ID);
+        DishTo invalid = new DishTo("", 100, LocalDate.now(), RestaurantTestData.REST_1_ID);
         perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(invalid))
                 .with(userHttpBasic(ADMIN)))
-                .andDo(print())
                 .andExpect(status().isUnprocessableEntity())
                 .andExpect(errorType(VALIDATION_ERROR))
                 .andDo(print());

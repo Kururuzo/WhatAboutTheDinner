@@ -1,6 +1,7 @@
 package ru.restaurant.service;
 
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -49,7 +50,7 @@ public class UserService implements UserDetailsService {
         return repository.findAll(Sort.by(Sort.Direction.ASC, "name", "email"));
     }
 
-    @CacheEvict(value = "users", key = "#user")
+    @CachePut(value = "users", key = "#user")
     public User create(User user) {
         Assert.notNull(user, "user must not be null");
         return repository.save(prepareToSave(user, passwordEncoder));

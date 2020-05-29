@@ -43,6 +43,12 @@
 #### get all dishes (for Authenticated)
 `curl 'http://localhost:8080/rest/dishes' --user 'user@yandex.ru:password'`
 
+#### get all dishes by date (for Authenticated) //for TEST
+`curl 'http://localhost:8080/rest/dishes?date=2020-04-01' --user 'user@yandex.ru:password'`
+
+#### get all dishes by date and restaurantId(for Authenticated) //for TEST
+`curl 'http://localhost:8080/rest/dishes?date=2020-04-01&restaurantId=100002' --user 'user@yandex.ru:password'`
+
 #### create dish (for Admin only) //for TEST
 `curl -s -i -X POST -d '{"name":"Boiled egg","price":10,"restaurantId":100002}' -H 'Content-Type:application/json;charset=UTF-8' http://localhost:8080/rest/dishes --user admin@gmail.com:admin`
 

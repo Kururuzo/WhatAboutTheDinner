@@ -1,6 +1,7 @@
 package ru.restaurant.service;
 
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -9,6 +10,8 @@ import org.springframework.util.Assert;
 import ru.restaurant.model.MenuItem;
 import ru.restaurant.model.Restaurant;
 import ru.restaurant.repository.MenuRepository;
+import ru.restaurant.to.DishTo;
+import ru.restaurant.to.DishToForOffer;
 import ru.restaurant.to.MenuTo;
 import ru.restaurant.to.RestaurantTo;
 
@@ -60,12 +63,12 @@ public class MenuService {
         return restsAndMenusMap.entrySet().stream().map(en -> new MenuTo(
                 date,
                 new RestaurantTo(en.getKey()),
-                en.getValue().stream().map(MenuItem::getDish).collect(Collectors.toList())))
+                en.getValue().stream().map(menuItem -> new DishToForOffer(menuItem.getDish())).collect(Collectors.toList())))
                 .sorted(Comparator.comparing(menuTo -> menuTo.getRestaurant().getId()))
                 .collect(Collectors.toList());
     }
 
-    @CacheEvict(value = {"offer", "menuItem"}, key = "#menuItem")
+    @CachePut(value = {"offer", "menuItem"}, key = "#menuItem")
     @Transactional
     public MenuItem create(MenuItem menuItem) {
         Assert.notNull(menuItem, "menu must not be null");

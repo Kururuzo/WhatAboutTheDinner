@@ -50,7 +50,7 @@ class MenuItemServiceTest extends AbstractServiceTest{
 
     @Test
     void create() throws Exception {
-        Dish dish = dishService.create(new Dish(null, "New", 50, REST_1));
+        Dish dish = dishService.create(new Dish(null, "New", 50, LocalDate.now(), REST_1));
         MenuItem newMenuItem = new MenuItem(null, LocalDate.of(2020, Month.APRIL,1), dish);
 
         MenuItem created = service.create(new MenuItem(newMenuItem));

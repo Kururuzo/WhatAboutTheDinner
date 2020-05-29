@@ -29,21 +29,21 @@ VALUES ('Lucky Pizza'), -- 100_002
        ('Green Garden'); -- 100_004
 
 -- ID 100_005 - 100_016
-INSERT INTO DISHES (NAME, PRICE, RESTAURANT_ID)
-VALUES ('Meat Soup', 50, 100002), -- 100_005
-       ('Caesar', 50, 100002),
-       ('BeefSteak', 150, 100002),
-       ('Coffee', 15, 100002),
+INSERT INTO DISHES (NAME, PRICE, DATE, RESTAURANT_ID)
+VALUES ('Meat Soup', 50, '2020-04-01', 100002), -- 100_005
+       ('Caesar', 50, '2020-04-01', 100002),
+       ('BeefSteak', 150, '2020-04-01', 100002),
+       ('Coffee', 15, '2020-04-01', 100002),
 
-       ('Chicken Soup', 40, 100003),
-       ('Salad with meat', 50, 100003),
-       ('Fried Chicken', 110, 100003),
-       ('Tee', 10, 100003),
+       ('Chicken Soup', 40, '2020-04-01', 100003),
+       ('Salad with meat', 50, '2020-04-01', 100003),
+       ('Fried Chicken', 110, '2020-04-01', 100003),
+       ('Tee', 10, '2020-04-01', 100003),
 
-       ('Gazpacho', 30, 100004),  -- 100_013
-       ('Vegetable salad', 40, 100004),
-       ('IceCream', 30, 100004),
-       ('Juice', 20, 100004);
+       ('Gazpacho', 30, '2020-04-01', 100004),  -- 100_013
+       ('Vegetable salad', 40, '2020-04-01', 100004),
+       ('IceCream', 30, '2020-04-01', 100004),
+       ('Juice', 20, '2020-04-01', 100004);
 
 
 -- ID 100_017 - 100_024

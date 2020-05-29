@@ -3,10 +3,13 @@ package ru.restaurant.service;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import ru.restaurant.DishTestData;
 import ru.restaurant.RestaurantTestData;
 import ru.restaurant.model.Restaurant;
 import ru.restaurant.util.exception.NotFoundException;
 
+import java.time.LocalDate;
+import java.time.Month;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -26,6 +29,20 @@ class RestaurantServiceTest extends AbstractServiceTest{
     @Test
     void getNotFound() throws Exception {
         assertThrows(NotFoundException.class, () -> service.get(1));
+    }
+
+    @Test
+    void findByName() throws Exception {
+        Restaurant restaurant = service.findByName(REST_1.getName());
+        REST_MATCHER.assertMatch(restaurant, REST_1);
+    }
+
+    @Test
+    void findByIdWithDishesByDate() throws Exception {
+        Restaurant restaurant = service.findByIdWithDishesByDate(REST_1_ID, LocalDate.of(2020, Month.APRIL,1));
+        Restaurant r = new Restaurant(REST_1);
+        r.setDishes(DishTestData.DISHES_FOR_REST_1);
+        REST_MATCHER.assertMatch(restaurant, r);
     }
 
     @Test
@@ -60,7 +77,7 @@ class RestaurantServiceTest extends AbstractServiceTest{
     @Test
     public void delete() throws Exception {
         service.delete(REST_1_ID);
-        REST_MATCHER.assertMatch(service.getAll(), List.of(REST_3, REST_2));
+        REST_MATCHER.assertMatch(service.getAll(), List.of(REST_2, REST_3));
     }
 
     @Test

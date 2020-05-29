@@ -1,6 +1,7 @@
 package ru.restaurant.service;
 
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -9,8 +10,10 @@ import org.springframework.util.Assert;
 import ru.restaurant.model.Restaurant;
 import ru.restaurant.repository.RestaurantRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import static ru.restaurant.util.ValidationUtil.checkNotFound;
 import static ru.restaurant.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
@@ -26,11 +29,24 @@ public class RestaurantService {
         return checkNotFoundWithId(repository.getById(id), id);
     }
 
-    public List<Restaurant> getAll() {
-        return repository.findAll(Sort.by(Sort.Direction.DESC, "id"));
+    public Restaurant findByName(String name) {
+        Assert.notNull(name, "name must not be null");
+        return checkNotFound(repository.findByName(name), name);
     }
 
-    @CacheEvict(value = "restaurants", key = "#restaurant")
+    public Restaurant findByIdWithDishesByDate(int id, LocalDate date) {
+        Restaurant restaurant = repository.findByIdWithDishesByDate(id, date);
+
+
+        return restaurant;
+//        return checkNotFoundWithId(repository.findByIdWithDishesByDate(id, date), id);
+    }
+
+    public List<Restaurant> getAll() {
+        return repository.findAll(Sort.by("id"));
+    }
+
+    @CachePut(value = "restaurants", key = "#restaurant")
     @Transactional
     public Restaurant create(Restaurant restaurant) {
         Assert.notNull(restaurant, "Restaurant must not be null");

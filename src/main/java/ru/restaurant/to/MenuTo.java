@@ -1,7 +1,5 @@
 package ru.restaurant.to;
 
-import ru.restaurant.model.Dish;
-
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.List;
@@ -15,18 +13,18 @@ public class MenuTo extends BaseTo {
     private RestaurantTo restaurant;
 
     @NotNull
-    private List<Dish> dishes;
+    private List<DishToForOffer> dishes;
 
     public MenuTo() {
     }
 
-    public MenuTo(@NotNull LocalDate date, @NotNull RestaurantTo restaurant, @NotNull List<Dish> dishes) {
+    public MenuTo(@NotNull LocalDate date, @NotNull RestaurantTo restaurant, @NotNull List<DishToForOffer> dishes) {
         this.date = date;
         this.restaurant = restaurant;
         this.dishes = dishes;
     }
 
-    public MenuTo(Integer id, @NotNull LocalDate date, @NotNull RestaurantTo restaurant, @NotNull List<Dish> dishes) {
+    public MenuTo(Integer id, @NotNull LocalDate date, @NotNull RestaurantTo restaurant, @NotNull List<DishToForOffer> dishes) {
         super(id);
         this.date = date;
         this.restaurant = restaurant;
@@ -49,11 +47,11 @@ public class MenuTo extends BaseTo {
         this.restaurant = restaurant;
     }
 
-    public List<Dish> getDishes() {
+    public List<DishToForOffer> getDishes() {
         return dishes;
     }
 
-    public void setDishes(List<Dish> dishes) {
+    public void setDishes(List<DishToForOffer> dishes) {
         this.dishes = dishes;
     }
 

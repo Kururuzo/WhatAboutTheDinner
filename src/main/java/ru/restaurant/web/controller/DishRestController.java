@@ -3,10 +3,10 @@ package ru.restaurant.web.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import ru.restaurant.model.Dish;
@@ -14,13 +14,12 @@ import ru.restaurant.model.Restaurant;
 import ru.restaurant.service.DishService;
 import ru.restaurant.service.RestaurantService;
 import ru.restaurant.to.DishTo;
-import ru.restaurant.util.DishUtil;
-import ru.restaurant.web.SecurityUtil;
+import ru.restaurant.util.ToUtil;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static ru.restaurant.util.ValidationUtil.assureIdConsistent;
 import static ru.restaurant.util.ValidationUtil.checkNew;
@@ -47,7 +46,20 @@ public class DishRestController {
     @GetMapping
     public List<DishTo> getAll() {
         log.info("getAll");
-        return DishUtil.tosFromDishes(service.getAll());
+        return ToUtil.tosFromModel(service.getAll(), DishTo.class);
+    }
+
+    @GetMapping(params = "date")
+    public List<DishTo> getByDate(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        log.info("get DishTo by date {}", date);
+        return ToUtil.tosFromModel(service.getAllByDate(date), DishTo.class);
+    }
+
+    @GetMapping(params = {"date", "restaurantId"})
+    public List<DishTo> findAllByDateAndRestaurantId(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date, int restaurantId) {
+        log.info("get DishTo by date {} and restaurantId {}", date, restaurantId);
+        return ToUtil.tosFromModel(service.findAllByDateAndRestaurantId(date, restaurantId), DishTo.class);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -80,8 +92,6 @@ public class DishRestController {
     //Service methods
     private Dish getDishFromTo (DishTo dishTo) {
         Restaurant restaurant = restaurantService.get(dishTo.getRestaurantId());
-        return new Dish(dishTo.getId(), dishTo.getName(), dishTo.getPrice(), restaurant);
+        return new Dish(dishTo.getId(), dishTo.getName(), dishTo.getPrice(), dishTo.getDate(), restaurant);
     }
-
-
 }

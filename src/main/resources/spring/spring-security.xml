@@ -9,6 +9,8 @@
         <http-basic/>
         <intercept-url pattern="/**/admin/**" access="hasRole('ROLE_ADMIN')"/>
 
+        <intercept-url pattern="/rest/offer/" method="GET" access="permitAll()"/>
+
         <intercept-url pattern="/rest/dishes/**" method="GET" access="isAuthenticated()"/>
         <intercept-url pattern="/rest/dishes/**" access="hasRole('ROLE_ADMIN')"/>
 

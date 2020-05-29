@@ -53,7 +53,6 @@ public class MenuItem extends AbstractBaseEntity {
         this.date = date;
     }
 
-
     public Dish getDish() {
         return dish;
     }

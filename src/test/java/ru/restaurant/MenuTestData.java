@@ -1,9 +1,10 @@
 package ru.restaurant;
 
-import ru.restaurant.model.Dish;
 import ru.restaurant.model.MenuItem;
+import ru.restaurant.to.DishToForOffer;
 import ru.restaurant.to.MenuTo;
 import ru.restaurant.to.RestaurantTo;
+import ru.restaurant.util.ToUtil;
 
 import java.time.LocalDate;
 import java.time.Month;
@@ -38,11 +39,11 @@ public class MenuTestData {
             MENU_5, MENU_4, MENU_3, MENU_2, MENU_1);
 
     public static final MenuTo MENU_TO_1 = new MenuTo(LocalDate.of(2020, Month.APRIL,1),
-            new RestaurantTo(REST_1), List.of(DISH_1, DISH_2, DISH_3, DISH_4));
+            new RestaurantTo(REST_1), ToUtil.tosFromModel(List.of(DISH_1, DISH_2, DISH_3, DISH_4), DishToForOffer.class));
     public static final MenuTo MENU_TO_2 = new MenuTo(LocalDate.of(2020, Month.APRIL,1),
-            new RestaurantTo(REST_2), List.of(DISH_5, DISH_6, DISH_7, DISH_8));
+            new RestaurantTo(REST_2), ToUtil.tosFromModel(List.of(DISH_5, DISH_6, DISH_7, DISH_8), DishToForOffer.class));
     public static final MenuTo MENU_TO_3 = new MenuTo(LocalDate.of(2020, Month.APRIL,1),
-            new RestaurantTo(REST_3), List.of(DISH_9, DISH_10, DISH_11, DISH_12));
+            new RestaurantTo(REST_3), ToUtil.tosFromModel(List.of(DISH_9, DISH_10, DISH_11, DISH_12), DishToForOffer.class));
 
     public static final List<MenuTo> MENUS_TO = List.of(MENU_TO_1, MENU_TO_2, MENU_TO_3);
 
