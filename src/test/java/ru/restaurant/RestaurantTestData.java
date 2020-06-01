@@ -15,13 +15,13 @@ public class RestaurantTestData {
     public static TestMatcher<Restaurant> REST_MATCHER = TestMatcher.usingEquals(Restaurant.class);
     public static TestMatcher<RestaurantTo> REST_TO_MATCHER = TestMatcher.usingFieldsComparator(RestaurantTo.class, "dishes");
 
-    public static final int REST_1_ID = START_SEQ + 2;
+    public static final int REST_1_ID = START_SEQ + 3;
 
 
-    public static final Restaurant REST_1 = new Restaurant(START_SEQ + 2, "Lucky Pizza"); // 100_002
+    public static final Restaurant REST_1 = new Restaurant(START_SEQ + 3, "Lucky Pizza"); // 100_003
 //    public static final Restaurant REST_1_WITH_DISHES = new Restaurant(START_SEQ + 2, "Lucky Pizza", Set.of(DISH_1, DISH_2, DISH_3, DISH_4)); // 100_002
-    public static final Restaurant REST_2 = new Restaurant(START_SEQ + 3, "Steak House");
-    public static final Restaurant REST_3 = new Restaurant(START_SEQ + 4, "Green Garden");
+    public static final Restaurant REST_2 = new Restaurant(START_SEQ + 4, "Steak House");
+    public static final Restaurant REST_3 = new Restaurant(START_SEQ + 5, "Green Garden");
 
     public static final List<Restaurant> RESTAURANTS = List.of(REST_1, REST_2, REST_3);
 

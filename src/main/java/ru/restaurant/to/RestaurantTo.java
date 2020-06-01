@@ -12,7 +12,6 @@ public class RestaurantTo extends BaseTo{
     @NotBlank
     private String name;
 
-    //
     private Set<DishToForOffer> dishes;
 
     public RestaurantTo(@NotBlank String name, Set<DishToForOffer> dishes) {

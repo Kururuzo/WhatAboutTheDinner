@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import ru.restaurant.model.User;
 import ru.restaurant.service.UserService;
 import ru.restaurant.to.UserTo;
-import ru.restaurant.util.UserUtil;
-import ru.restaurant.util.ValidationUtil;
 
 import java.util.List;
 

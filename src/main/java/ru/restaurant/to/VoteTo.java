@@ -2,33 +2,36 @@ package ru.restaurant.to;
 
 import ru.restaurant.model.Vote;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 public class VoteTo extends BaseTo {
+    @NotNull
     private LocalDate date;
-    private RestaurantTo restaurant;
-    private UserForVoteTo user;
+
+    @NotNull
+    private Integer restaurantId;
+
+    @NotNull
+    private Integer userId;
 
     public VoteTo(){}
 
-    public VoteTo(LocalDate date, RestaurantTo restaurant, UserForVoteTo user) {
-        this.date = date;
-        this.restaurant = restaurant;
-        this.user = user;
+    public VoteTo(Vote vote) {
+        this(vote.getId(), vote.getDate(), vote.getRestaurant().getId(), vote.getUser().id());
     }
 
-    public VoteTo(Integer id, LocalDate date, RestaurantTo restaurant, UserForVoteTo user) {
+    public VoteTo(LocalDate date, Integer restaurantId, Integer userId) {
+        this.date = date;
+        this.restaurantId = restaurantId;
+        this.userId = userId;
+    }
+
+    public VoteTo(Integer id, LocalDate date, Integer restaurantId, Integer userId) {
         super(id);
         this.date = date;
-        this.restaurant = restaurant;
-        this.user = user;
-    }
-
-    public VoteTo(Vote vote){
-        super.id = vote.getId();
-        this.date = vote.getDate();
-        this.restaurant = new RestaurantTo(vote.getRestaurant());
-        this.user = new UserForVoteTo(vote.getUser());
+        this.restaurantId = restaurantId;
+        this.userId = userId;
     }
 
     public LocalDate getDate() {
@@ -39,28 +42,28 @@ public class VoteTo extends BaseTo {
         this.date = date;
     }
 
-    public RestaurantTo getRestaurant() {
-        return restaurant;
+    public Integer getRestaurantId() {
+        return restaurantId;
     }
 
-    public void setRestaurant(RestaurantTo restaurant) {
-        this.restaurant = restaurant;
+    public void setRestaurantId(Integer restaurantId) {
+        this.restaurantId = restaurantId;
     }
 
-    public UserForVoteTo getUser() {
-        return user;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setUser(UserForVoteTo user) {
-        this.user = user;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     @Override
     public String toString() {
         return "VoteTo{" +
                 "date=" + date +
-                ", restaurant=" + restaurant +
-                ", user=" + user +
+                ", restaurantId=" + restaurantId +
+                ", userId=" + userId +
                 ", id=" + id +
                 '}';
     }

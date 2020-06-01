@@ -5,27 +5,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import ru.restaurant.DishTestData;
 import ru.restaurant.RestaurantTestData;
-import ru.restaurant.model.MenuItem;
-import ru.restaurant.model.Vote;
+import ru.restaurant.VoteTestData;
 import ru.restaurant.repository.VoteRepository;
-import ru.restaurant.service.MenuService;
 import ru.restaurant.service.VoteService;
+import ru.restaurant.to.VoteTo;
 import ru.restaurant.web.AbstractControllerTest;
+import ru.restaurant.web.json.JsonUtil;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.Month;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.restaurant.UserTestData.USER;
+import static ru.restaurant.UserTestData.*;
 import static ru.restaurant.VoteTestData.*;
 import static ru.restaurant.util.exception.ErrorType.VALIDATION_ERROR;
+import static ru.restaurant.web.TestUtil.readFromJson;
 import static ru.restaurant.web.TestUtil.userHttpBasic;
 
 class VoteRestControllerTest extends AbstractControllerTest {
@@ -34,9 +30,6 @@ class VoteRestControllerTest extends AbstractControllerTest {
 
     @Autowired
     VoteService service;
-
-    @Autowired
-    MenuService menuService;
 
     @Autowired
     VoteRepository voteRepository;
@@ -48,7 +41,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(VOTE_MATCHER.contentJson(VOTE_1));
+                .andExpect(VOTE_TO_MATCHER.contentJson(VOTE_1_TO));
     }
 
     @Test
@@ -64,7 +57,7 @@ class VoteRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andDo(print())
-                .andExpect(VOTE_MATCHER.contentJson(List.of(VOTE_1)));
+                .andExpect(VOTE_TO_MATCHER.contentJson(VOTE_1_TO));
     }
 
     @Test
@@ -73,29 +66,29 @@ class VoteRestControllerTest extends AbstractControllerTest {
                 .with(userHttpBasic(USER)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(VOTE_MATCHER.contentJson(List.of(VOTE_1)))
+                .andExpect(VOTE_TO_MATCHER.contentJson(List.of(VOTE_1_TO)))
                 .andDo(print());
     }
 
     @Test
     void doVote() throws Exception {
-        LocalDate nowDate = LocalDate.now();
-        menuService.create(new MenuItem(nowDate, DishTestData.DISH_1));
-
+        VoteTo newVoteTo = VoteTestData.getNewTo();
         ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
-                .with(userHttpBasic(USER))
+                .with(userHttpBasic(USER_2))
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(String.valueOf(RestaurantTestData.REST_1_ID)))
+                .content(String.valueOf(newVoteTo.getRestaurantId())))
                 .andDo(print())
                 .andExpect(status().isCreated());
+
+        VoteTo created = readFromJson(action, VoteTo.class);
+        int newId = created.id();
+        newVoteTo.setId(newId);
+        VOTE_TO_MATCHER.assertMatch(created, newVoteTo);
+        VOTE_TO_MATCHER.assertMatch(new VoteTo(service.get(newId)), newVoteTo);
     }
 
     @Test
     void doDuplicateVote() throws Exception {
-        LocalDate nowDate = LocalDate.now();
-        MenuItem menuItem1 = menuService.create(new MenuItem(nowDate, DishTestData.DISH_1));
-        Vote newVote = voteRepository.save(new Vote(nowDate, RestaurantTestData.REST_1, USER));
-
         perform(MockMvcRequestBuilders.post(REST_URL)
                 .with(userHttpBasic(USER))
                 .contentType(MediaType.APPLICATION_JSON)
@@ -106,32 +99,16 @@ class VoteRestControllerTest extends AbstractControllerTest {
 
     @Test
     void updateVoteForUser() throws Exception {
-        if(LocalTime.now().isBefore(LocalTime.of(11, 0))) {
-            LocalDate nowDate = LocalDate.now();
-            MenuItem menu1 = menuService.create(new MenuItem(nowDate, DishTestData.DISH_1));
-            Vote newVote = voteRepository.save(new Vote(nowDate, RestaurantTestData.REST_1, USER));
+        VoteTo newVote = VoteTestData.getUpdatedToForUser();
+        perform(MockMvcRequestBuilders.put(REST_URL + newVote.getId())
+                .with(userHttpBasic(USER))
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(newVote)))
+                .andExpect(status().isNoContent())
+                .andDo(print());
 
-            MenuItem menu2 = menuService.create(new MenuItem(nowDate, DishTestData.DISH_2));
-
-            perform(MockMvcRequestBuilders.put(REST_URL + RestaurantTestData.REST_2.getId())
-                    .with(userHttpBasic(USER))
-                    .contentType(MediaType.APPLICATION_JSON))
-                    .andDo(print())
-                    .andExpect(status().isNoContent());
-
-            Vote updated = voteRepository.getOne(newVote.getId());
-            newVote.setRestaurant(RestaurantTestData.REST_2);
-            VOTE_MATCHER.assertMatch(updated, newVote);
-        } else {
-            LocalDate nowDate = LocalDate.now();
-            voteRepository.save(new Vote(nowDate, RestaurantTestData.REST_1, USER));
-
-            perform(MockMvcRequestBuilders.put(REST_URL + RestaurantTestData.REST_2.getId())
-                    .with(userHttpBasic(USER))
-                    .contentType(MediaType.APPLICATION_JSON))
-                    .andDo(print())
-                    .andExpect(status().isUnprocessableEntity());
-        }
+        VoteTo updated = new VoteTo(service.getByDateAndUserId(newVote.getDate(), newVote.getUserId()));
+        VOTE_TO_MATCHER.assertMatch(updated, newVote);
     }
 
     @Test

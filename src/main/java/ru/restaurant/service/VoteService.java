@@ -6,33 +6,29 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.restaurant.model.*;
-import ru.restaurant.repository.MenuRepository;
-import ru.restaurant.repository.RestaurantRepository;
-import ru.restaurant.repository.UserRepository;
 import ru.restaurant.repository.VoteRepository;
 import ru.restaurant.to.VoteResultsTo;
-import ru.restaurant.util.VoteUtil;
 import ru.restaurant.util.exception.IllegalRequestDataException;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ru.restaurant.util.ValidationUtil.checkNotFound;
 import static ru.restaurant.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
 public class VoteService {
+    public static final LocalTime CHECK_TIME = LocalTime.of(11, 0);
+    public static final LocalDate CHECK_DATE = LocalDate.now();
+
     private final VoteRepository repository;
 
-    public VoteService(VoteRepository repository, RestaurantRepository restaurantRepository, UserRepository userRepository, MenuRepository menuRepository) {
+    public VoteService(VoteRepository repository) {
         this.repository = repository;
     }
-
-    @Autowired
-    MenuService menuService;
 
     @Autowired
     RestaurantService restaurantService;
@@ -45,8 +41,7 @@ public class VoteService {
     }
 
     public Vote getByDateAndUserId(LocalDate date, int userId) {
-        return checkNotFound(repository.findByDateAndUserId(date, userId),
-                "Vote for this date not found");
+        return repository.findByDateAndUserId(date, userId);
     }
 
     public List<Vote> getAllByUserId(int userId) {
@@ -66,41 +61,13 @@ public class VoteService {
     }
 
     @Transactional
-    public Vote doVote(LocalDate date, int restaurantId, int userId) {
-        Assert.notNull(date, "date must not be null");
-
-        LocalDateTime now = LocalDateTime.now();
-        VoteUtil.checkIsDateExpired(date, now, restaurantId);
-
-//        MenuItem menuItem = menuService.findByDateAndRestaurantId(date, restaurantId);
-        Restaurant restaurant = restaurantService.get(restaurantId);
-        User user = userService.get(userId);
-
-        Vote vote = findByDateAndUserId(date, userId);
-
-        if (vote != null) {
+    public Vote create(Vote vote) {
+        Assert.notNull(vote, "Vote must not be null");
+        if (getByDateAndUserId(vote.getDate(), vote.getUser().getId()) != null) {
             throw new IllegalRequestDataException("You already voted! If your decision changed, please, use PUT method");
         } else {
-            vote = new Vote(date, restaurant, user);
             return repository.save(vote);
         }
-    }
-
-    @Transactional
-    public void updateVote(Vote vote, int restaurantId, int userId, LocalDate date) {
-        Assert.notNull(vote, "vote must not be null");
-
-        LocalDateTime now = LocalDateTime.now();
-        VoteUtil.checkIsDateAndTimeExpired(date, now, restaurantId);
-
-        //todo - user check??
-        Restaurant restaurant = restaurantService.get(restaurantId);
-        vote.setRestaurant(restaurant);
-        checkNotFoundWithId(repository.save(vote), vote.getId());
-    }
-
-    public Vote findByDateAndUserId(LocalDate date, int userId) {
-        return repository.findByDateAndUserId(date, userId);
     }
 
     @Transactional
@@ -119,7 +86,7 @@ public class VoteService {
     }
 
     @Transactional
-    public Vote create(Vote vote) {
+    public Vote create1(Vote vote) {
         Assert.notNull(vote, "vote must not be null");
         return repository.save(vote);
     }
@@ -134,4 +101,13 @@ public class VoteService {
     public void delete(int id) {
         checkNotFoundWithId(repository.delete(id) != 0, id);
     }
+
+
+    //----------------------------- Service methods -----------------------------
+//    private Vote createVote(int voteId, LocalDate date, int restaurantId, int userId) {
+//        Assert.notNull(date, "date must not be null");
+//        Restaurant restaurant = restaurantService.get(restaurantId);
+//        User user = userService.get(userId);
+//        return new Vote(voteId, date, restaurant, user);
+//    }
 }

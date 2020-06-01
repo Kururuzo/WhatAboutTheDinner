@@ -17,6 +17,7 @@ public class UserTestData {
 
     public static final User USER = new User(USER_ID, "User", "user@yandex.ru", "password",  Role.USER );
     public static final User ADMIN = new User(ADMIN_ID, "Admin", "admin@gmail.com", "admin",  Role.USER, Role.ADMIN);
+    public static final User USER_2 = new User(START_SEQ + 2, "SecondUser", "second_user@yandex.ru", "password",  Role.USER );
 
     public static User getNew() {
         return new User(null, "New", "new@gmail.com", "newPass", false, new Date(), Collections.singleton(Role.USER)

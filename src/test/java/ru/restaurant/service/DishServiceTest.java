@@ -13,8 +13,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static ru.restaurant.DishTestData.*;
-import static ru.restaurant.MenuTestData.MENUS;
-import static ru.restaurant.MenuTestData.MENU_MATCHER;
 
 class DishServiceTest extends AbstractServiceTest{
 

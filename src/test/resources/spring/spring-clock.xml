@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+         http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<!--    <bean class="java.time.Clock" factory-method="systemDefaultZone" name="clock"/>-->
+
+    <bean class="java.time.Clock" factory-method="fixed" name="clock">
+        <constructor-arg>
+            <bean class="java.time.Instant" factory-method="parse">
+                <constructor-arg value="2020-04-01T07:13:00Z"/>
+            </bean>
+        </constructor-arg>
+        <constructor-arg>
+            <bean class="java.time.ZoneId" factory-method="systemDefault" />
+        </constructor-arg>
+    </bean>
+
+</beans>

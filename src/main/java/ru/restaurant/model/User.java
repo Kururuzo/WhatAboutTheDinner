@@ -138,7 +138,7 @@ public class User extends AbstractNamedEntity{
                 ", name=" + name +
                 ", enabled=" + enabled +
 //                ", roles=" + roles +
-                ", votes=" + votes +
+//                ", votes=" + votes +
                 '}';
     }
 }

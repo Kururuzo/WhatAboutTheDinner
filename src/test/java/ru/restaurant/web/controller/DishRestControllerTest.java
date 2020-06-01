@@ -22,8 +22,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.restaurant.DishTestData.*;
-import static ru.restaurant.MenuTestData.MENUS;
-import static ru.restaurant.MenuTestData.MENU_MATCHER;
 import static ru.restaurant.UserTestData.ADMIN;
 import static ru.restaurant.util.exception.ErrorType.VALIDATION_ERROR;
 import static ru.restaurant.web.TestUtil.*;

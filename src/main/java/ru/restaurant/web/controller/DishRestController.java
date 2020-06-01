@@ -90,6 +90,7 @@ public class DishRestController {
     }
 
     //Service methods
+    //todo move to service layer
     private Dish getDishFromTo (DishTo dishTo) {
         Restaurant restaurant = restaurantService.get(dishTo.getRestaurantId());
         return new Dish(dishTo.getId(), dishTo.getName(), dishTo.getPrice(), dishTo.getDate(), restaurant);

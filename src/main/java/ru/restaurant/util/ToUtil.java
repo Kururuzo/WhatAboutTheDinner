@@ -12,14 +12,6 @@ public class ToUtil {
     private ToUtil() {
     }
 
-//    public static List<DishTo> tosFromDishes (List<Dish> dishes) {
-//        return dishes.stream().map(DishTo::new).collect(Collectors.toList());
-//    }
-//
-//    public static List<DishToForOffer> tosForOfferFromDishes (List<Dish> dishes) {
-//        return dishes.stream().map(DishToForOffer::new).collect(Collectors.toList());
-//    }
-
     public static <T> List<T> tosFromModel(List<? extends AbstractBaseEntity> list, Class<T> clazz) {
         return list.stream().map(o -> {
             try {

@@ -2,16 +2,12 @@ package ru.restaurant.service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import ru.restaurant.DishTestData;
 import ru.restaurant.RestaurantTestData;
 import ru.restaurant.UserTestData;
-import ru.restaurant.model.MenuItem;
 import ru.restaurant.model.Vote;
-import ru.restaurant.repository.MenuRepository;
 import ru.restaurant.repository.VoteRepository;
 import ru.restaurant.util.exception.NotFoundException;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -22,9 +18,6 @@ class VoteServiceTest extends AbstractServiceTest{
 
     @Autowired
     VoteService service;
-
-    @Autowired
-    MenuRepository menuRepository;
 
     @Autowired
     VoteRepository voteRepository;
@@ -48,18 +41,14 @@ class VoteServiceTest extends AbstractServiceTest{
 
     @Test
     void create() throws Exception {
-        LocalDate nowDate = LocalDate.now();
-        MenuItem menuItem = menuRepository.save(new MenuItem(nowDate, DishTestData.DISH_1));
+        Vote created = service.create(getNew());
 
         Vote newVote = new Vote();
-        Vote created = service.doVote(
-                nowDate,
-                RestaurantTestData.REST_1_ID,
-                UserTestData.USER_ID);
         int newId = created.getId();
-        newVote.setId(newId);
+        newVote.setId(created.getId());
+
         VOTE_MATCHER.assertMatch(created, newVote);
-        VOTE_MATCHER.assertMatch(service.get(newId, UserTestData.USER_ID), newVote);
+        VOTE_MATCHER.assertMatch(service.get(newId, UserTestData.USER_2.getId()), newVote);
     }
 
     @Test

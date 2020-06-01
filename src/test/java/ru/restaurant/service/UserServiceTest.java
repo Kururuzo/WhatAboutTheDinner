@@ -35,7 +35,7 @@ class UserServiceTest extends AbstractServiceTest{
     @Test
     void getAll() throws Exception {
         List<User> all = service.getAll();
-        USER_MATCHER.assertMatch(all, ADMIN, USER);
+        USER_MATCHER.assertMatch(all,  ADMIN, USER_2, USER);
     }
 
     @Test
@@ -79,7 +79,7 @@ class UserServiceTest extends AbstractServiceTest{
     @Test
     public void delete() throws Exception {
         service.delete(USER_ID);
-        USER_MATCHER.assertMatch(service.getAll(), List.of(ADMIN));
+        USER_MATCHER.assertMatch(service.getAll(), List.of(ADMIN, USER_2));
     }
 
     @Test
